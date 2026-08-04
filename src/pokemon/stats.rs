@@ -19,7 +19,8 @@ impl Stats {
             Stats::SATK,
             Stats::SDEF,
             Stats::SPEED,
-        ].into_iter()
+        ]
+        .into_iter()
     }
 
     pub fn as_str(&self) -> &str {

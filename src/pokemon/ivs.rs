@@ -1,5 +1,5 @@
-use std::str::FromStr;
 use crate::pokemon::stats::Stats;
+use std::str::FromStr;
 
 #[derive(Clone, Debug)]
 pub enum IVs {
@@ -31,7 +31,7 @@ impl IVs {
             IVs::SDEF,
             IVs::SPEED,
         ]
-            .into_iter()
+        .into_iter()
     }
 }
 

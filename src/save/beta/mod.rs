@@ -4,7 +4,7 @@ pub struct BetaEnumStr<'a>(&'a str);
 
 pub enum Error {
     InvalidNumber,
-    UnknownType(i32)
+    UnknownType(i32),
 }
 impl TryFrom<BetaEnumStr<'_>> for Types {
     type Error = Error;
@@ -27,13 +27,15 @@ impl TryFrom<BetaEnumStr<'_>> for Types {
             16 => Ok(Types::Water),
             17 => Ok(Types::Unknown),
             18 => Ok(Types::Fairy),
-            _ => Err(Error::UnknownType(num))
+            _ => Err(Error::UnknownType(num)),
         }
     }
 }
 
 fn get_enum_number(enum_str: &str) -> Option<i32> {
-    enum_str.to_string().split("::")
+    enum_str
+        .to_string()
+        .split("::")
         .last()
         .and_then(|part| part.strip_prefix("NewEnumerator"))
         .and_then(|x| x.parse::<i32>().ok())
@@ -63,5 +65,3 @@ pub fn from_enum_str(enum_str: &str) -> Option<&str> {
 
     Some(val)
 }
-
-
