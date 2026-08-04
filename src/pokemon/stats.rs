@@ -1,5 +1,3 @@
-use std::path::Iter;
-
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum Stats {
     CurrentHp,
