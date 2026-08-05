@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum Stats {
     CurrentHp,
@@ -7,6 +9,11 @@ pub enum Stats {
     SATK,
     SDEF,
     SPEED,
+}
+
+#[derive(Clone, Debug)]
+pub struct StatStruct {
+    pub values: HashMap<Stats, f64>,
 }
 
 impl Stats {

@@ -1,4 +1,8 @@
-use crate::pokemon::types::Types;
+pub mod r#box;
+pub mod pokemon;
+
+use pokemon::types::Types;
+use crate::utils::get_enum_number;
 
 pub struct BetaEnumStr<'a>(&'a str);
 
@@ -30,15 +34,6 @@ impl TryFrom<BetaEnumStr<'_>> for Types {
             _ => Err(Error::UnknownType(num)),
         }
     }
-}
-
-fn get_enum_number(enum_str: &str) -> Option<i32> {
-    enum_str
-        .to_string()
-        .split("::")
-        .last()
-        .and_then(|part| part.strip_prefix("NewEnumerator"))
-        .and_then(|x| x.parse::<i32>().ok())
 }
 
 pub fn from_enum_str(enum_str: &str) -> Option<&str> {

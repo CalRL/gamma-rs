@@ -1,4 +1,4 @@
-use crate::pokemon::stats::Stats;
+use crate::save::beta::pokemon::stats::Stats;
 use std::str::FromStr;
 
 #[derive(Clone, Debug)]

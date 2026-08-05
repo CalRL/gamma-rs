@@ -55,4 +55,26 @@ impl Gender {
             Gender::Genderless => "ENUM_Gender::NewEnumerator2",
         }
     }
+
+    pub fn from_enum(string: &str) -> Option<Gender> {
+        let gender = match string {
+            "ENUM_Gender::NewEnumerator0" => Gender::Male,
+            "ENUM_Gender::NewEnumerator1" => Gender::Female,
+            "ENUM_Gender::NewEnumerator2" => Gender::Genderless,
+            _ => return None
+        };
+
+        Some(gender)
+    }
+
+    /// Converts to UE 4/5 ENUM
+    pub fn as_enum(&self) -> String {
+        let string = match &self {
+            Gender::Male => "ENUM_Gender::NewEnumerator0",
+            Gender::Female => "ENUM_Gender::NewEnumerator1",
+            Gender::Genderless => "ENUM_Gender::NewEnumerator2",
+        };
+
+        string.to_string()
+    }
 }
