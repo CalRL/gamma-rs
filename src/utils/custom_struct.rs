@@ -16,8 +16,8 @@ pub type CustomStruct<'a> = (&'a String, &'a IndexMap<String, Vec<Property>>);
 // ]
 fn get_starts_with<'a>(value: &'a StructProperty, string: &str) -> Option<&'a Vec<Property>> {
     match &value.value {
-        StructPropertyValue::CustomStruct { properties, .. } => {
-            for (k, v) in properties.0.iter() {
+        StructPropertyValue::CustomStruct { 0: map, .. } => {
+            for (k, v) in map.iter() {
                 if k.starts_with(string) {
                     return Some(v);
                 }
@@ -33,8 +33,8 @@ fn get_starts_with_mut<'a>(
     string: &str,
 ) -> Option<&'a mut Vec<Property>> {
     match &mut value.value {
-        StructPropertyValue::CustomStruct { properties, .. } => {
-            for (k, v) in properties.0.iter_mut() {
+        StructPropertyValue::CustomStruct { 0: map, .. } => {
+            for (k, v) in map.iter_mut() {
                 if k.starts_with(string) {
                     return Some(v);
                 }
@@ -45,7 +45,7 @@ fn get_starts_with_mut<'a>(
     }
 }
 
-pub fn get_struct_property_at_idx(property: &Property, idx: usize) -> Option<&StructProperty> {
+pub fn get_struct_property_at_idx(property: &Property, idx: usize) -> Option<&StructPropertyValue> {
     let array = match property {
         Property::ArrayProperty(prop) => prop,
         _ => return None,
@@ -61,23 +61,7 @@ pub fn get_struct_property_at_idx(property: &Property, idx: usize) -> Option<&St
 pub fn get_struct_property_at_idx_mut(
     property: &mut Property,
     idx: usize,
-) -> Option<&mut StructProperty> {
-    let array = match property {
-        Property::ArrayProperty(prop) => prop,
-        _ => return None,
-    };
-
-    match array {
-        ArrayProperty::Structs { structs, .. } => structs.get_mut(idx),
-        _ => None,
-    }
-}
-
-pub fn get_struct_at_idx(property: &Property, idx: usize) -> Option<&Property> {
-    todo!()
-}
-
-pub fn get_struct_at_idx_mut(property: &mut Property, idx: usize) -> Option<&mut StructProperty> {
+) -> Option<&mut StructPropertyValue> {
     let array = match property {
         Property::ArrayProperty(prop) => prop,
         _ => return None,
