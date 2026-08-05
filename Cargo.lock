@@ -84,9 +84,9 @@ dependencies = [
 
 [[package]]
 name = "gvas"
-version = "0.10.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "919c69e558a978f3da675e79a04798f849ad769beb44be113f3943c789412a4c"
+checksum = "31c83dbe7e79cb2e11037bad7bd0abd83a709ed0875d9c8263093e82f9f3026b"
 dependencies = [
  "byteorder",
  "cfg_eval",
