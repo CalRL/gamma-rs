@@ -62,6 +62,38 @@ impl StartsWith for StructProperty {
         }
     }
 }
+
+impl StartsWith for StructPropertyValue {
+    /// Returns a vector of properties. In our case (usually), the vector contains a single object
+    fn get_starts_with(&self, string: &str) -> Option<&Vec<Property>> {
+        match &self {
+            StructPropertyValue::CustomStruct { 0: map, .. } => {
+                for (k, v) in map.iter() {
+                    if k.starts_with(string) {
+                        return Some(v);
+                    }
+                }
+                None
+            }
+            _ => None,
+        }
+    }
+
+    /// Returns a mutable   vector of properties in a StructProperty,
+    fn get_starts_with_mut(&mut self, string: &str) -> Option<&mut Vec<Property>> {
+        match self {
+            StructPropertyValue::CustomStruct { 0: map, .. } => {
+                for (k, v) in map.iter_mut() {
+                    if k.starts_with(string) {
+                        return Some(v);
+                    }
+                }
+                None
+            }
+            _ => None,
+        }
+    }
+}
 pub trait PropertyPath {
     fn get_starts_with(&self, prefix: &str) -> Option<&Property>;
     fn get_starts_with_mut(&mut self, prefix: &str) -> Option<&mut Property>;
