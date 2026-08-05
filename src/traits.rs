@@ -35,8 +35,8 @@ impl StartsWith for StructProperty {
     /// Returns a vector of properties. In our case (usually), the vector contains a single object
     fn get_starts_with(&self, string: &str) -> Option<&Vec<Property>> {
         match &self.value {
-            StructPropertyValue::CustomStruct { properties, .. } => {
-                for (k, v) in properties.0.iter() {
+            StructPropertyValue::CustomStruct { 0: map, .. } => {
+                for (k, v) in map.iter() {
                     if k.starts_with(string) {
                         return Some(v);
                     }
@@ -50,8 +50,8 @@ impl StartsWith for StructProperty {
     /// Returns a mutable   vector of properties in a StructProperty,
     fn get_starts_with_mut(&mut self, string: &str) -> Option<&mut Vec<Property>> {
         match &mut self.value {
-            StructPropertyValue::CustomStruct { properties, .. } => {
-                for (k, v) in properties.0.iter_mut() {
+            StructPropertyValue::CustomStruct { 0: map, .. } => {
+                for (k, v) in map.iter_mut() {
                     if k.starts_with(string) {
                         return Some(v);
                     }
@@ -70,8 +70,8 @@ impl PropertyPath for Property {
     /// Returns a CUSTOMSTRUCT
     fn get_starts_with(&self, prefix: &str) -> Option<&Property> {
         if let Property::StructProperty(StructProperty { value, .. }) = self {
-            if let StructPropertyValue::CustomStruct { properties, .. } = value {
-                for (k, v) in &properties.0 {
+            if let StructPropertyValue::CustomStruct { 0: map, .. } = value {
+                for (k, v) in map.iter() {
                     if k.starts_with(prefix) {
                         return v.first();
                     }
@@ -83,8 +83,8 @@ impl PropertyPath for Property {
 
     fn get_starts_with_mut(&mut self, prefix: &str) -> Option<&mut Property> {
         if let Property::StructProperty(StructProperty { value, .. }) = self {
-            if let StructPropertyValue::CustomStruct { properties, .. } = value {
-                for (k, v) in properties.0.iter_mut() {
+            if let StructPropertyValue::CustomStruct { 0: map, .. } = value {
+                for (k, v) in map.iter_mut() {
                     if k.starts_with(prefix) {
                         return v.first_mut();
                     }
