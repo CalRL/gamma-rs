@@ -76,3 +76,27 @@ impl fmt::Display for Types {
         f.write_str(value)
     }
 }
+
+pub fn from_enum(enum_str: &str) -> Option<&str> {
+    let num: i32 = crate::utils::get_enum_number(enum_str)?;
+    let t = match num {
+        0 => "BUG",
+        2 => "FLYING",
+        4 => "GROUND",
+        5 => "NORMAL",
+        6 => "POISON",
+        7 => "ROCK",
+        8 => "STEEL",
+        9 => "DARK",
+        10 => "STEEL",
+        12 => "FIRE",
+        13 => "GRASS",
+        15 => "PSYCHIC",
+        16 => "WATER",
+        17 => "NONE",
+        18 => "FAIRY",
+        _ => return None,
+    };
+
+    Some(t)
+}
