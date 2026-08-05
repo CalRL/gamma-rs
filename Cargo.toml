@@ -1,0 +1,8 @@
+[package]
+name = "gamma-rs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gvas = "0.10.0"
+indexmap = "2.14.0"
