@@ -6,11 +6,11 @@ use gvas::properties::Property;
 use gvas::properties::int_property::IntProperty;
 use gvas::properties::struct_property::{StructProperty, StructPropertyValue};
 
-pub fn get_ivs<'a>(properties: &'a StructProperty) -> Option<Vec<&'a i32>> {
-    match &properties.value {
-        StructPropertyValue::CustomStruct { properties, .. } => {
+pub fn get_ivs<'a>(property: &'a StructPropertyValue) -> Option<Vec<&'a i32>> {
+    match property {
+        StructPropertyValue::CustomStruct { 0: map, .. } => {
             let mut ivs: Vec<&'a i32> = Vec::new();
-            for (_, v) in properties.0.iter() {
+            for (_, v) in map.iter() {
                 let prop: &Property = v.first()?;
                 let int_prop: &IntProperty = prop.get_int()?;
                 ivs.push(&int_prop.value);
@@ -52,7 +52,7 @@ impl<'a> IV<'a> {
     }
 
     pub fn get_ivs_at(&self, index: usize) -> Option<Vec<&i32>> {
-        let sp: &StructProperty = get_struct_property_at_idx(self.property, index)?;
+        let sp: &StructPropertyValue = get_struct_property_at_idx(self.property, index)?;
 
         let ivs: Vec<&i32> = get_ivs(sp)?;
 
@@ -95,16 +95,16 @@ impl<'a> IVMut<'a> {
     }
 
     pub fn set_iv_at(&mut self, index: usize, iv: IVs, value: i32) -> Result<(), String> {
-        let sp: &mut StructProperty = match get_struct_property_at_idx_mut(self.property, index) {
+        let sp: &mut StructPropertyValue = match get_struct_property_at_idx_mut(self.property, index) {
             None => {
                 return Err("Failed to get struct property mutably.".to_string());
             }
             Some(prop) => prop,
         };
 
-        match &mut sp.value {
-            StructPropertyValue::CustomStruct { properties, .. } => {
-                for (k, v) in properties.0.iter_mut() {
+        match sp {
+            StructPropertyValue::CustomStruct { 0: map, .. } => {
+                for (k, v) in map.iter_mut() {
                     if k.starts_with(iv.as_str()) {
                         let prop: &mut Property = match v.first_mut() {
                             None => return Err("Failed to get first".to_string()),
