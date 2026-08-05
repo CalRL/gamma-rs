@@ -1,6 +1,6 @@
+use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::struct_property::{StructProperty, StructPropertyValue};
-use gvas::properties::Property;
 use indexmap::IndexMap;
 
 pub fn moves_array(property: &Property) -> Option<&ArrayProperty> {

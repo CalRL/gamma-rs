@@ -1,8 +1,8 @@
 pub mod r#box;
 pub mod pokemon;
 
-use pokemon::types::Types;
 use crate::utils::get_enum_number;
+use pokemon::types::Types;
 
 pub struct BetaEnumStr<'a>(&'a str);
 

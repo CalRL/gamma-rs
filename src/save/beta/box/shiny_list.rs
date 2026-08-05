@@ -1,6 +1,6 @@
-use gvas::properties::array_property::ArrayProperty;
-use gvas::properties::Property;
 use gvas::GvasFile;
+use gvas::properties::Property;
+use gvas::properties::array_property::ArrayProperty;
 
 pub fn get_shiny_list(array: &ArrayProperty) -> Option<&Vec<bool>> {
     match array {

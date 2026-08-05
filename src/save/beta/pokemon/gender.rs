@@ -61,7 +61,7 @@ impl Gender {
             "ENUM_Gender::NewEnumerator0" => Gender::Male,
             "ENUM_Gender::NewEnumerator1" => Gender::Female,
             "ENUM_Gender::NewEnumerator2" => Gender::Genderless,
-            _ => return None
+            _ => return None,
         };
 
         Some(gender)

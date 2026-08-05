@@ -1,7 +1,7 @@
-use gvas::GvasFile;
-use gvas::properties::array_property::ArrayProperty;
 use crate::save::beta::r#box::row_id::RowID;
 use crate::save::beta::r#box::slot_id::SlotID;
+use gvas::GvasFile;
+use gvas::properties::array_property::ArrayProperty;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BoxPosition {
@@ -22,28 +22,17 @@ impl BoxPosition {
             return Err(Error::OutOfBounds);
         }
 
-        Ok(
-            BoxPosition {
-                row,
-                slot,
-            }
-        )
+        Ok(BoxPosition { row, slot })
     }
 
     pub fn exists_at(&self, gvas_file: &GvasFile, box_number: i32) -> Result<bool, Error> {
-        let row_arr = RowID::new(gvas_file, box_number)
-            .ok_or(Error::NoRows)?;
+        let row_arr = RowID::new(gvas_file, box_number).ok_or(Error::NoRows)?;
 
-        let slot_arr = SlotID::new(gvas_file, box_number)
-            .ok_or(Error::NoSlots)?;
+        let slot_arr = SlotID::new(gvas_file, box_number).ok_or(Error::NoSlots)?;
 
-        let row_prop = row_arr
-            .as_list()
-            .ok_or(Error::InvalidRowArray)?;
+        let row_prop = row_arr.as_list().ok_or(Error::InvalidRowArray)?;
 
-        let slot_prop = slot_arr
-            .as_list()
-            .ok_or(Error::InvalidSlotArray)?;
+        let slot_prop = slot_arr.as_list().ok_or(Error::InvalidSlotArray)?;
 
         let ArrayProperty::Ints { ints: row_ints } = &row_prop else {
             return Err(Error::InvalidRowArray);

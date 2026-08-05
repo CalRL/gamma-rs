@@ -1,6 +1,6 @@
-use gvas::properties::array_property::ArrayProperty;
-use gvas::properties::Property;
 use gvas::GvasFile;
+use gvas::properties::Property;
+use gvas::properties::array_property::ArrayProperty;
 
 pub fn class_at(array: &ArrayProperty, idx: usize) -> Option<&String> {
     let class_property = match &array {
@@ -17,9 +17,7 @@ pub fn class_at(array: &ArrayProperty, idx: usize) -> Option<&String> {
 /// Probably shouldn't be used, at least not until an enum for every class is written...
 pub fn class_at_mut(array: &mut ArrayProperty, idx: usize) -> Option<&mut String> {
     let class_property: &mut Property = match array {
-        ArrayProperty::Properties {
-            properties, ..
-        } => properties.get_mut(idx)?,
+        ArrayProperty::Properties { properties, .. } => properties.get_mut(idx)?,
         _ => return None,
     };
 

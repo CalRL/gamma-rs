@@ -2,9 +2,9 @@ pub mod beta;
 pub mod properties;
 pub mod version;
 
-use std::fs::File;
 use crate::save::version::GameVersion;
 use gvas::GvasFile;
+use std::fs::File;
 
 pub struct GammaFile(GvasFile, GameVersion);
 
@@ -19,7 +19,7 @@ impl GammaFile {
             1: version,
         })
     }
-    pub fn save(self, file: &mut File) -> Result<(), gvas::error::Error>{
+    pub fn save(self, file: &mut File) -> Result<(), gvas::error::Error> {
         self.0.write(file)
     }
 }
@@ -27,7 +27,7 @@ impl GammaFile {
 pub enum Error {
     InvalidFormat,
     InvalidVersion,
-    Gvas(gvas::error::Error)
+    Gvas(gvas::error::Error),
 }
 mod tests {
     use crate::save;

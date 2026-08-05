@@ -1,5 +1,5 @@
-use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::Property;
+use gvas::properties::array_property::ArrayProperty;
 
 /// Returns the ID ArrayProperty
 pub fn id_array(property: &Property) -> Option<&ArrayProperty> {

@@ -1,12 +1,12 @@
+use crate::save::beta::pokemon::stats::{StatStruct, Stats};
+use crate::traits::{NamespacedValue, StartsWith};
 use crate::utils::custom_struct::{get_struct_at_idx_mut, get_struct_property_at_idx};
+use gvas::GvasFile;
+use gvas::properties::Property;
 use gvas::properties::int_property::BytePropertyValue;
 use gvas::properties::struct_property::StructProperty;
 use gvas::properties::text_property::FTextHistory;
-use gvas::properties::Property;
-use gvas::GvasFile;
 use std::collections::HashMap;
-use crate::save::beta::pokemon::stats::{StatStruct, Stats};
-use crate::traits::{NamespacedValue, StartsWith};
 
 pub fn get_is_fainted(struct_property: &StructProperty) -> Option<bool> {
     let is_fainted: &Vec<Property> = struct_property.get_starts_with("isFainted")?;
@@ -74,9 +74,7 @@ pub fn get_stat_mut(properties: &mut StructProperty, stat: Stats) -> Option<&mut
 
     let val = match stat_property {
         Property::DoubleProperty(double) => Some(&mut double.value.0),
-        _ => {
-            None
-        }
+        _ => None,
     };
 
     val
@@ -88,9 +86,7 @@ pub fn get_stats(properties: &StructProperty) -> Option<StatStruct> {
         let property = props.get_starts_with(name)?.first()?;
         match property {
             Property::DoubleProperty(double) => Some(double.value.0),
-            _ => {
-                None
-            }
+            _ => None,
         }
     }
 

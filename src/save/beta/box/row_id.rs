@@ -1,6 +1,6 @@
-use gvas::properties::array_property::ArrayProperty;
-use gvas::properties::Property;
 use gvas::GvasFile;
+use gvas::properties::Property;
+use gvas::properties::array_property::ArrayProperty;
 
 pub struct RowID<'a> {
     property: &'a Property,

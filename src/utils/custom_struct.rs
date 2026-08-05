@@ -1,6 +1,6 @@
+use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::struct_property::{StructProperty, StructPropertyValue};
-use gvas::properties::Property;
 use indexmap::IndexMap;
 
 pub type CustomStruct<'a> = (&'a String, &'a IndexMap<String, Vec<Property>>);
@@ -33,9 +33,7 @@ fn get_starts_with_mut<'a>(
     string: &str,
 ) -> Option<&'a mut Vec<Property>> {
     match &mut value.value {
-        StructPropertyValue::CustomStruct {
-            properties, ..
-        } => {
+        StructPropertyValue::CustomStruct { properties, .. } => {
             for (k, v) in properties.0.iter_mut() {
                 if k.starts_with(string) {
                     return Some(v);
@@ -86,9 +84,7 @@ pub fn get_struct_at_idx_mut(property: &mut Property, idx: usize) -> Option<&mut
     };
 
     match array {
-        ArrayProperty::Structs {
-            structs, ..
-        } => structs.get_mut(idx),
+        ArrayProperty::Structs { structs, .. } => structs.get_mut(idx),
         _ => None,
     }
 }

@@ -1,6 +1,6 @@
+use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::struct_property::StructProperty;
-use gvas::properties::Property;
 
 // Takes the "PartyAttackLists" property
 pub fn attack_array(property: &Property) -> Option<&ArrayProperty> {

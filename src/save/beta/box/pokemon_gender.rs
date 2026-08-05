@@ -1,8 +1,8 @@
+use crate::save::beta::pokemon::gender::Gender;
+use gvas::GvasFile;
+use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::int_property::BytePropertyValue;
-use gvas::properties::Property;
-use gvas::GvasFile;
-use crate::save::beta::pokemon::gender::Gender;
 
 pub struct PokemonGender<'a> {
     property: &'a Property,

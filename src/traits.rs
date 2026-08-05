@@ -1,6 +1,6 @@
+use gvas::properties::Property;
 use gvas::properties::int_property::BytePropertyValue;
 use gvas::properties::struct_property::{StructProperty, StructPropertyValue};
-use gvas::properties::Property;
 
 pub struct ParentProperty<'a> {
     property: Option<&'a Property>,
@@ -50,9 +50,7 @@ impl StartsWith for StructProperty {
     /// Returns a mutable   vector of properties in a StructProperty,
     fn get_starts_with_mut(&mut self, string: &str) -> Option<&mut Vec<Property>> {
         match &mut self.value {
-            StructPropertyValue::CustomStruct {
-                properties, ..
-            } => {
+            StructPropertyValue::CustomStruct { properties, .. } => {
                 for (k, v) in properties.0.iter_mut() {
                     if k.starts_with(string) {
                         return Some(v);
