@@ -1,22 +1,15 @@
 use crate::save::beta::pokemon::stats::{StatStruct, Stats};
-use crate::traits::StartsWith;
 use crate::utils::custom_struct::{get_struct_property_at_idx};
 use gvas::GvasFile;
 use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::Property;
 use gvas::properties::int_property::BytePropertyValue;
-use gvas::properties::struct_property::{StructProperty, StructPropertyValue};
+use gvas::properties::struct_property::StructPropertyValue;
 use gvas::properties::text_property::FTextHistory;
-use std::collections::HashMap;
 use crate::save::beta::StorageType;
 
-pub fn get_is_fainted(struct_property: &StructProperty) -> Option<bool> {
-    let is_fainted: &Vec<Property> = struct_property.get_starts_with("isFainted")?;
-    let first: &Property = is_fainted.first()?;
-    match first {
-        Property::BoolProperty(bool) => Some(bool.value),
-        _ => None,
-    }
+pub fn get_is_fainted(property: &StructPropertyValue) -> Option<bool> {
+    Some(get_first(property, "isFainted")?.get_bool()?.value)
 }
 
 // contains:
@@ -36,7 +29,7 @@ pub fn get_is_fainted(struct_property: &StructProperty) -> Option<bool> {
 // nature - byte (enum)
 
 #[derive(Default, Clone, Debug)]
-pub struct InfoStruct {
+pub struct InfoSnapshot {
     pub is_fainted: Option<bool>,
     pub name: Option<String>,
     pub character_icon: Option<String>,
@@ -53,14 +46,8 @@ pub struct InfoStruct {
     pub secondary_type: Option<String>,
     pub nature: Option<String>,
 }
+// TODO: make a infosnapshot::new func with storagetype and index!
 
-/// Takes the custom struct indexmap.
-// properties: The properties inside the custom struct
-// e.g.
-// "CustomStruct": {
-// "type_name": "STRUCT_CharacterAttributes",
-// "properties": { <- **THIS**
-// must not be casted to structproperty, get_starts_with handles that...
 pub fn get_stat(property: &StructPropertyValue, stat: Stats) -> Option<f64> {
     let stat_str: &str = stat.as_str();
     let stat_property = get_first(property, stat_str)?;
@@ -80,20 +67,10 @@ pub fn get_stat_mut(property: &mut StructPropertyValue, stat: Stats) -> Option<&
     }
 }
 
-// todo()! fix this
-pub fn get_stats(properties: &StructProperty) -> Option<StatStruct> {
-    fn get_value(props: &StructProperty, stat: Stats) -> Option<f64> {
-        let name = stat.as_str();
-        let property = props.get_starts_with(name)?.first()?;
-        match property {
-            Property::DoubleProperty(double) => Some(double.value.0),
-            _ => None,
-        }
-    }
-
-    let mut map: HashMap<Stats, f64> = HashMap::new();
+pub fn get_stats(property: &StructPropertyValue) -> Option<StatStruct> {
+    let mut map = std::collections::HashMap::new();
     for stat in Stats::iter() {
-        map.insert(stat.clone(), get_value(properties, stat)?);
+        map.insert(stat.clone(), get_stat(property, stat)?);
     }
 
     Some(StatStruct { values: map })
@@ -191,34 +168,44 @@ impl<'a> PokemonInfo<'a> {
         Some(Self { property: prop })
     }
 
+    pub fn get_is_fainted(&self, index: usize) -> Option<bool> {
+        let struct_at = get_struct_property_at_idx(self.property, index)?;
+        get_is_fainted(struct_at)
+    }
+
+    pub fn get_level(&self, index: usize) -> Option<&i32> {
+        let struct_at = get_struct_property_at_idx(self.property, index)?;
+        get_level(struct_at)
+    }
+
     pub fn get_name(&self, index: usize) -> Option<&String> {
         let struct_at = get_struct_property_at_idx(self.property, index)?;
 
         get_name(struct_at)
     }
 
-    // pub fn get_nature(&self, index: usize) -> Option<String> {
-    //     let struct_at = get_struct_property_at_idx(self.property, index)?;
-    //     get_nature_string(struct_at).cloned()
-    // }
-    //
-    // pub fn get_primary_type(&self, index: usize) -> Option<String> {
-    //     let struct_at = get_struct_property_at_idx(self.property, index)?;
-    //     get_primary_type_string(struct_at).cloned()
-    // }
-    //
-    // pub fn get_secondary_type(&self, index: usize) -> Option<String> {
-    //     let struct_at = get_struct_property_at_idx(self.property, index)?;
-    //     get_secondary_type_string(struct_at).cloned()
-    // }
-    // pub fn get_stats(&self, index: usize) -> Option<StatStruct> {
-    //     let struct_at = get_struct_property_at_idx(self.property, index)?;
-    //     get_stats(struct_at)
-    // }
-    // pub fn get_stat(&self, index: usize, stat: Stats) -> Option<f64> {
-    //     let struct_at = get_struct_property_at_idx(self.property, index)?;
-    //     get_stat(struct_at, stat)
-    // }
+    pub fn get_nature(&self, index: usize) -> Option<String> {
+        let struct_at = get_struct_property_at_idx(self.property, index)?;
+        get_nature(struct_at).cloned()
+    }
+
+    pub fn get_primary_type(&self, index: usize) -> Option<String> {
+        let struct_at = get_struct_property_at_idx(self.property, index)?;
+        get_primary_type(struct_at).cloned()
+    }
+
+    pub fn get_secondary_type(&self, index: usize) -> Option<String> {
+        let struct_at = get_struct_property_at_idx(self.property, index)?;
+        get_secondary_type(struct_at).cloned()
+    }
+    pub fn get_stats(&self, index: usize) -> Option<StatStruct> {
+        let struct_at = get_struct_property_at_idx(self.property, index)?;
+        get_stats(struct_at)
+    }
+    pub fn get_stat(&self, index: usize, stat: Stats) -> Option<f64> {
+        let struct_at = get_struct_property_at_idx(self.property, index)?;
+        get_stat(struct_at, stat)
+    }
 }
 
 pub struct PokemonInfoMut<'a> {
@@ -280,9 +267,6 @@ mod tests {
     use super::*;
     use gvas::game_version::GameVersion;
     use std::fs::File;
-    use crate::save::beta::BetaEnumStr;
-    use crate::save::beta::pokemon::types::Types;
-
     const SLOT1_PATH: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/saves/Slot1.sav");
 
     struct NameCase<'a> {
@@ -302,6 +286,55 @@ mod tests {
         idx: usize,
         expected_primary_type: &'a str,
         expected_secondary_type: &'a str,
+    }
+
+    struct FaintedCase<'a> {
+        array_name: &'a str,
+        idx: usize,
+        expected_is_fainted: bool,
+    }
+
+    struct LevelCase<'a> {
+        array_name: &'a str,
+        idx: usize,
+        expected_level: i32,
+    }
+
+    struct PartyLevelCase {
+        idx: usize,
+        expected_level: i32,
+    }
+
+    struct StatCase<'a> {
+        array_name: &'a str,
+        idx: usize,
+        stat: Stats,
+        expected_value: f64,
+    }
+
+    struct StatMutCase<'a> {
+        array_name: &'a str,
+        idx: usize,
+        stat: Stats,
+        new_value: f64,
+    }
+
+    struct StatsCase<'a> {
+        array_name: &'a str,
+        idx: usize,
+        stat: Stats,
+        expected_value: f64,
+    }
+
+    struct SetStatCase {
+        idx: usize,
+        stat: Stats,
+        new_value: f64,
+    }
+
+    struct SetNameCase<'a> {
+        idx: usize,
+        new_name: &'a str,
     }
 
     fn generate_case<'a>(array_name: &'a str, idx: usize, expected_name: &'a str) -> NameCase<'a> {
@@ -338,9 +371,111 @@ mod tests {
         }
     }
 
+    fn generate_fainted_case(
+        array_name: &str,
+        idx: usize,
+        expected_is_fainted: bool,
+    ) -> FaintedCase<'_> {
+        FaintedCase {
+            array_name,
+            idx,
+            expected_is_fainted,
+        }
+    }
+
+    fn generate_level_case(
+        array_name: &str,
+        idx: usize,
+        expected_level: i32,
+    ) -> LevelCase<'_> {
+        LevelCase {
+            array_name,
+            idx,
+            expected_level,
+        }
+    }
+
+    fn generate_party_level_case(idx: usize, expected_level: i32) -> PartyLevelCase {
+        PartyLevelCase {
+            idx,
+            expected_level,
+        }
+    }
+
+    fn generate_stat_case(
+        array_name: &str,
+        idx: usize,
+        stat: Stats,
+        expected_value: f64,
+    ) -> StatCase<'_> {
+        StatCase {
+            array_name,
+            idx,
+            stat,
+            expected_value,
+        }
+    }
+
+    fn generate_stat_mut_case(
+        array_name: &str,
+        idx: usize,
+        stat: Stats,
+        new_value: f64,
+    ) -> StatMutCase<'_> {
+        StatMutCase {
+            array_name,
+            idx,
+            stat,
+            new_value,
+        }
+    }
+
+    fn generate_stats_case(
+        array_name: &str,
+        idx: usize,
+        stat: Stats,
+        expected_value: f64,
+    ) -> StatsCase<'_> {
+        StatsCase {
+            array_name,
+            idx,
+            stat,
+            expected_value,
+        }
+    }
+
+    fn generate_set_stat_case(idx: usize, stat: Stats, new_value: f64) -> SetStatCase {
+        SetStatCase {
+            idx,
+            stat,
+            new_value,
+        }
+    }
+
+    fn generate_set_name_case(idx: usize, new_name: &str) -> SetNameCase<'_> {
+        SetNameCase { idx, new_name }
+    }
+
     fn load_slot1() -> GvasFile {
         let mut file = File::open(SLOT1_PATH).expect("save file exists");
         GvasFile::read(&mut file, GameVersion::Default).expect("gvas file reads")
+    }
+
+    fn get_pokemon_info_mut<'a>(
+        gvas_file: &'a mut GvasFile,
+        array_name: &str,
+        idx: usize,
+    ) -> &'a mut StructPropertyValue {
+        let property = gvas_file
+            .properties
+            .get_mut(array_name)
+            .expect("array property exists");
+        let array = property.get_array_mut().expect("property is an array");
+        match array {
+            ArrayProperty::Structs { structs, .. } => structs.get_mut(idx),
+            _ => None,
+        }
+        .expect("pokemon info exists")
     }
 
     fn assert_name(gvas_file: &GvasFile, case: &NameCase<'_>) {
@@ -394,6 +529,162 @@ mod tests {
         );
     }
 
+    fn assert_is_fainted(gvas_file: &GvasFile, case: &FaintedCase<'_>) {
+        let property = gvas_file
+            .properties
+            .get(case.array_name)
+            .expect("array property exists");
+        let pokemon_info = get_struct_property_at_idx(property, case.idx).expect("pokemon info exists");
+        let is_fainted = get_is_fainted(pokemon_info).expect("pokemon isFainted exists");
+
+        assert_eq!(
+            is_fainted, case.expected_is_fainted,
+            "isFainted mismatch for {}[{}]",
+            case.array_name, case.idx
+        );
+    }
+
+    fn assert_level(gvas_file: &GvasFile, case: &LevelCase<'_>) {
+        let property = gvas_file
+            .properties
+            .get(case.array_name)
+            .expect("array property exists");
+        let pokemon_info = get_struct_property_at_idx(property, case.idx).expect("pokemon info exists");
+        let level = get_level(pokemon_info).expect("pokemon level exists");
+
+        assert_eq!(
+            *level, case.expected_level,
+            "level mismatch for {}[{}]",
+            case.array_name, case.idx
+        );
+    }
+
+    fn assert_party_level(gvas_file: &GvasFile, case: &PartyLevelCase) {
+        let pokemon_info = PokemonInfo::new_party(gvas_file).expect("party pokemon info exists");
+        let level = pokemon_info.get_level(case.idx).expect("pokemon level exists");
+
+        assert_eq!(
+            *level, case.expected_level,
+            "level mismatch for PartyPokemonInfo[{}]",
+            case.idx
+        );
+    }
+
+    fn assert_stat(gvas_file: &GvasFile, case: &StatCase<'_>) {
+        let cloned = gvas_file.clone();
+        let property = cloned
+            .properties
+            .get(case.array_name)
+            .expect("array property exists");
+        let pokemon_info = get_struct_property_at_idx(property, case.idx).expect("pokemon info exists");
+        let value = get_stat(pokemon_info, case.stat.clone()).expect("pokemon stat exists");
+
+        assert!(
+            (value - case.expected_value).abs() < f64::EPSILON,
+            "{:?} mismatch for {}[{}]: got {}, expected {}",
+            case.stat,
+            case.array_name,
+            case.idx,
+            value,
+            case.expected_value
+        );
+    }
+
+    fn assert_stat_mut(case: &StatMutCase<'_>) {
+        let mut gvas_file = load_slot1().clone();
+        let pokemon_info = get_pokemon_info_mut(&mut gvas_file, case.array_name, case.idx);
+        let value = get_stat_mut(pokemon_info, case.stat.clone()).expect("pokemon stat exists");
+        *value = case.new_value;
+
+        assert!(
+            (*value - case.new_value).abs() < f64::EPSILON,
+            "{:?} mutation mismatch for {}[{}]: got {}, expected {}",
+            case.stat,
+            case.array_name,
+            case.idx,
+            value,
+            case.new_value
+        );
+    }
+
+    fn assert_stats(gvas_file: &GvasFile, case: &StatsCase<'_>) {
+        let property = gvas_file
+            .properties
+            .get(case.array_name)
+            .expect("array property exists");
+        let pokemon_info = get_struct_property_at_idx(property, case.idx).expect("pokemon info exists");
+        let stats = get_stats(pokemon_info).expect("pokemon stats exist");
+        let value = stats.values.get(&case.stat).expect("stat exists in stat struct");
+
+        assert!(
+            (*value - case.expected_value).abs() < f64::EPSILON,
+            "{:?} mismatch in get_stats for {}[{}]: got {}, expected {}",
+            case.stat,
+            case.array_name,
+            case.idx,
+            value,
+            case.expected_value
+        );
+    }
+
+    fn assert_set_stat(gvas_file: &GvasFile, case: &SetStatCase) {
+        let mut cloned_gvas_file = gvas_file.clone();
+        let mut pokemon_info = PokemonInfoMut::new_party(&mut cloned_gvas_file)
+            .expect("party pokemon info exists");
+        assert!(
+            pokemon_info
+                .set_stat(case.idx, case.stat.clone(), case.new_value)
+                .is_ok(),
+            "set_stat failed for PartyPokemonInfo[{}] {:?}",
+            case.idx,
+            case.stat
+        );
+        drop(pokemon_info);
+
+        let property = cloned_gvas_file
+            .properties
+            .get("PartyPokemonInfo")
+            .expect("party pokemon info exists");
+        let pokemon_info = get_struct_property_at_idx(property, case.idx).expect("pokemon info exists");
+        let value = get_stat(pokemon_info, case.stat.clone()).expect("pokemon stat exists");
+
+        assert!(
+            (value - case.new_value).abs() < f64::EPSILON,
+            "{:?} set_stat mismatch for PartyPokemonInfo[{}]: got {}, expected {}",
+            case.stat,
+            case.idx,
+            value,
+            case.new_value
+        );
+    }
+
+    fn assert_set_name(gvas_file: &GvasFile, case: &SetNameCase<'_>) {
+        let mut cloned_gvas_file = gvas_file.clone();
+        let mut pokemon_info = PokemonInfoMut::new_party(&mut cloned_gvas_file)
+            .expect("party pokemon info exists");
+        assert!(
+            pokemon_info
+                .set_name(case.idx, case.new_name.to_string())
+                .is_ok(),
+            "set_name failed for PartyPokemonInfo[{}]",
+            case.idx
+        );
+        drop(pokemon_info);
+
+        let property = cloned_gvas_file
+            .properties
+            .get("PartyPokemonInfo")
+            .expect("party pokemon info exists");
+        let pokemon_info = get_struct_property_at_idx(property, case.idx).expect("pokemon info exists");
+        let name = get_name(pokemon_info).expect("pokemon name exists");
+
+        assert_eq!(
+            name, case.new_name,
+            "set_name mismatch for PartyPokemonInfo[{}]",
+            case.idx
+        );
+    }
+
     #[test]
     fn reads_names_from_gvas_file() {
         let gvas_file = load_slot1();
@@ -440,6 +731,115 @@ mod tests {
         assert!(!cases.is_empty(), "add pokemon info type test cases");
         for case in cases {
             assert_types(&gvas_file, case);
+        }
+    }
+
+    #[test]
+    fn reads_is_fainted_from_gvas_file() {
+        let gvas_file = load_slot1();
+
+        let cases = &[generate_fainted_case("Box1PokemonInfo", 0, false)];
+
+        assert!(!cases.is_empty(), "add pokemon info isFainted test cases");
+        for case in cases {
+            assert_is_fainted(&gvas_file, case);
+        }
+    }
+
+    #[test]
+    fn reads_levels_from_gvas_file() {
+        let gvas_file = load_slot1();
+
+        let cases = &[generate_level_case("Box1PokemonInfo", 0, 10)];
+
+        assert!(!cases.is_empty(), "add pokemon info level test cases");
+        for case in cases {
+            assert_level(&gvas_file, case);
+        }
+    }
+
+    #[test]
+    fn reads_party_levels_from_wrapper() {
+        let gvas_file = load_slot1();
+
+        let cases = &[generate_party_level_case(0, 48)];
+
+        assert!(!cases.is_empty(), "add party pokemon info level test cases");
+        for case in cases {
+            assert_party_level(&gvas_file, case);
+        }
+    }
+
+    #[test]
+    fn reads_stats_by_name_from_gvas_file() {
+        let gvas_file = load_slot1();
+
+        let cases = &[generate_stat_case(
+            "Box1PokemonInfo",
+            0,
+            Stats::CurrentHp,
+            11.0,
+        )];
+
+        assert!(!cases.is_empty(), "add pokemon info stat test cases");
+        for case in cases {
+            assert_stat(&gvas_file, case);
+        }
+    }
+
+    #[test]
+    fn mutates_stats_from_gvas_file() {
+        let cases = &[generate_stat_mut_case(
+            "Box1PokemonInfo",
+            0,
+            Stats::MaxHp,
+            123.0,
+        )];
+
+        assert!(!cases.is_empty(), "add pokemon info stat mutation test cases");
+        for case in cases {
+            assert_stat_mut(case);
+        }
+    }
+
+    #[test]
+    fn sets_party_stat_on_cloned_gvas_file() {
+        let gvas_file = load_slot1();
+
+        let cases = &[generate_set_stat_case(0, Stats::MaxHp, 123.0)];
+
+        assert!(!cases.is_empty(), "add set_stat test cases");
+        for case in cases {
+            assert_set_stat(&gvas_file, case);
+        }
+    }
+
+    #[test]
+    fn sets_party_name_on_cloned_gvas_file() {
+        let gvas_file = load_slot1();
+
+        let cases = &[generate_set_name_case(0, "TEST_NAME")];
+
+        assert!(!cases.is_empty(), "add set_name test cases");
+        for case in cases {
+            assert_set_name(&gvas_file, case);
+        }
+    }
+
+    #[test]
+    fn reads_all_stats_from_gvas_file() {
+        let gvas_file = load_slot1();
+
+        let cases = &[generate_stats_case(
+            "Box1PokemonInfo",
+            0,
+            Stats::ATK,
+            6.0,
+        )];
+
+        assert!(!cases.is_empty(), "add pokemon info get_stats test cases");
+        for case in cases {
+            assert_stats(&gvas_file, case);
         }
     }
 }
