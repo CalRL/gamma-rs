@@ -80,6 +80,7 @@ pub fn get_stat_mut(property: &mut StructPropertyValue, stat: Stats) -> Option<&
     }
 }
 
+// todo()! fix this
 pub fn get_stats(properties: &StructProperty) -> Option<StatStruct> {
     fn get_value(props: &StructProperty, stat: Stats) -> Option<f64> {
         let name = stat.as_str();
