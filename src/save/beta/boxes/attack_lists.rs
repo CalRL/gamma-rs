@@ -55,3 +55,20 @@ pub fn parse_attack(attack: &str) -> Option<String> {
 }
 
 pub struct AttackLists;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parses_attack_class_path() {
+        let attack = "/Game/Blueprints/Attacks/BP_Astonish.BP_Astonish_C";
+
+        assert_eq!(parse_attack(attack).as_deref(), Some("Astonish"));
+    }
+
+    #[test]
+    fn parses_attack_class_name_without_path() {
+        assert_eq!(parse_attack("BP_Growl_C").as_deref(), Some("Growl"));
+    }
+}
