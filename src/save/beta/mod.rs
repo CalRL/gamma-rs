@@ -1,4 +1,4 @@
-pub mod r#box;
+pub mod boxes;
 pub mod pokemon;
 
 use std::str::FromStr;
@@ -46,4 +46,10 @@ impl TryFrom<BetaEnumStr<'_>> for Types {
             _ => Err(Error::UnknownType(num)),
         }
     }
+}
+
+#[derive(PartialEq, Clone, Debug)]
+pub enum StorageType {
+    PARTY,
+    BOXES,
 }
