@@ -1,10 +1,22 @@
-pub mod r#box;
+pub mod boxes;
 pub mod pokemon;
 
+use std::str::FromStr;
 use crate::utils::get_enum_number;
 use pokemon::types::Types;
 
 pub struct BetaEnumStr<'a>(&'a str);
+
+impl<'a> TryFrom<&'a str> for BetaEnumStr<'a> {
+    type Error = ();
+
+    fn try_from(value: &'a str) -> Result<Self, Self::Error> {
+        match value.contains("::NewEnumerator") {
+            true => Ok(BetaEnumStr(value)),
+            false => Err(())
+        }
+    }
+}
 
 pub enum Error {
     InvalidNumber,
@@ -36,27 +48,8 @@ impl TryFrom<BetaEnumStr<'_>> for Types {
     }
 }
 
-pub fn from_enum_str(enum_str: &str) -> Option<&str> {
-    let num = get_enum_number(enum_str)?;
-
-    let val = match num {
-        0 => "BUG",
-        2 => "FLYING",
-        4 => "GROUND",
-        5 => "NORMAL",
-        6 => "POISON",
-        7 => "ROCK",
-        8 => "STEEL",
-        9 => "DARK",
-        10 => "STEEL",
-        12 => "FIRE",
-        13 => "GRASS",
-        15 => "PSYCHIC",
-        16 => "WATER",
-        17 => "NONE",
-        18 => "FAIRY",
-        _ => return None,
-    };
-
-    Some(val)
+#[derive(PartialEq, Clone, Debug)]
+pub enum StorageType {
+    PARTY,
+    BOXES,
 }

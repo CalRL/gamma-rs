@@ -13,8 +13,3 @@ pub mod row_id;
 pub mod shiny_list;
 pub mod slot_id;
 
-#[derive(PartialEq, Clone, Debug)]
-pub enum StorageType {
-    PARTY,
-    BOXES,
-}
