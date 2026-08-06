@@ -2,6 +2,7 @@ use crate::save::beta::pokemon::ball::PokeBall;
 use gvas::GvasFile;
 use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
+use crate::save::beta::BetaEnumStr;
 
 pub struct CaughtBall<'a> {
     property: &'a Property,
@@ -17,7 +18,7 @@ impl<'a> CaughtBall<'a> {
         let arr: &ArrayProperty = self.property.get_array()?;
         let ball_enum: String = get_caught_ball_at(arr, index)?;
 
-        PokeBall::from_enum(ball_enum.as_str())
+        PokeBall::try_from(BetaEnumStr::try_from(ball_enum.as_str()).ok()?).ok()
     }
 }
 
