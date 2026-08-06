@@ -9,6 +9,7 @@ pub struct BoxPosition {
     pub slot: i32,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Error {
     OutOfBounds,
     NoRows,
@@ -46,5 +47,26 @@ impl BoxPosition {
             .iter()
             .zip(slot_ints.iter())
             .any(|(&row, &slot)| row == self.row && slot == self.slot))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn creates_position_inside_bounds() {
+        let position = BoxPosition::new(2, 5).expect("position is in bounds");
+
+        assert_eq!(position, BoxPosition { row: 2, slot: 5 });
+    }
+
+    #[test]
+    fn rejects_positions_outside_bounds() {
+        let cases = [(-1, 0), (3, 0), (0, -1), (0, 6)];
+
+        for (row, slot) in cases {
+            assert_eq!(BoxPosition::new(row, slot), Err(Error::OutOfBounds));
+        }
     }
 }
