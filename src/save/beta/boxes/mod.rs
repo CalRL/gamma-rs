@@ -12,4 +12,3 @@ pub mod pp_moves_lists;
 pub mod row_id;
 pub mod shiny_list;
 pub mod slot_id;
-

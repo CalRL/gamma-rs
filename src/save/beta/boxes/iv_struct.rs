@@ -1,10 +1,10 @@
+use crate::save::beta::StorageType;
 use crate::save::beta::pokemon::ivs::IVs;
 use crate::utils::custom_struct::{get_struct_property_at_idx, get_struct_property_at_idx_mut};
 use gvas::GvasFile;
 use gvas::properties::Property;
 use gvas::properties::int_property::IntProperty;
 use gvas::properties::struct_property::{StructProperty, StructPropertyValue};
-use crate::save::beta::StorageType;
 
 pub fn get_ivs<'a>(property: &'a StructPropertyValue) -> Option<Vec<&'a i32>> {
     match property {
@@ -95,12 +95,13 @@ impl<'a> IVMut<'a> {
     }
 
     pub fn set_iv_at(&mut self, index: usize, iv: IVs, value: i32) -> Result<(), String> {
-        let sp: &mut StructPropertyValue = match get_struct_property_at_idx_mut(self.property, index) {
-            None => {
-                return Err("Failed to get struct property mutably.".to_string());
-            }
-            Some(prop) => prop,
-        };
+        let sp: &mut StructPropertyValue =
+            match get_struct_property_at_idx_mut(self.property, index) {
+                None => {
+                    return Err("Failed to get struct property mutably.".to_string());
+                }
+                Some(prop) => prop,
+            };
 
         match sp {
             StructPropertyValue::CustomStruct { 0: map, .. } => {

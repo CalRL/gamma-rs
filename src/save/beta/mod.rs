@@ -1,9 +1,9 @@
 pub mod boxes;
 pub mod pokemon;
 
-use std::str::FromStr;
 use crate::utils::get_enum_number;
 use pokemon::types::Types;
+use std::str::FromStr;
 
 pub struct BetaEnumStr<'a>(&'a str);
 
@@ -13,7 +13,7 @@ impl<'a> TryFrom<&'a str> for BetaEnumStr<'a> {
     fn try_from(value: &'a str) -> Result<Self, Self::Error> {
         match value.contains("::NewEnumerator") {
             true => Ok(BetaEnumStr(value)),
-            false => Err(())
+            false => Err(()),
         }
     }
 }

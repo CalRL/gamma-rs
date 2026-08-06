@@ -18,7 +18,10 @@ pub fn id_at(array: &ArrayProperty, index: usize) -> Option<&i32> {
 }
 
 pub fn id_at_mut(array: &mut ArrayProperty, index: usize) -> Option<&mut i32> {
-    todo!()
+    match array {
+        ArrayProperty::Ints { ints, .. } => ints.get_mut(index),
+        _ => None,
+    }
 }
 
 pub struct PokemonID;

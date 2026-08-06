@@ -1,8 +1,8 @@
+use crate::save::beta::BetaEnumStr;
 use crate::save::beta::pokemon::ball::PokeBall;
 use gvas::GvasFile;
 use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
-use crate::save::beta::BetaEnumStr;
 
 pub struct CaughtBall<'a> {
     property: &'a Property,
