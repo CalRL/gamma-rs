@@ -1,3 +1,5 @@
+use crate::save::beta::BetaEnumStr;
+
 #[derive(PartialEq, Debug, Clone)]
 pub enum PokeBall {
     PokeBall,
@@ -30,5 +32,18 @@ impl PokeBall {
             PokeBall::GreatBall => "Great Ball",
             PokeBall::UltraBall => "Ultra Ball",
         }
+    }
+}
+
+impl<'a> TryFrom<BetaEnumStr<'a>> for PokeBall {
+    type Error = ();
+
+    fn try_from(value: BetaEnumStr<'a>) -> Result<PokeBall, Self::Error> {
+        Ok(match value.0 {
+            "/Game/SPRITES/UI/ITEMS/SPR_Item_POKEBALL.SPR_Item_POKEBALL" => PokeBall::PokeBall,
+            "/Game/SPRITES/UI/ITEMS/SPR_Item_GREATBALL.SPR_Item_GREATBALL" => PokeBall::GreatBall,
+            "/Game/SPRITES/UI/ITEMS/SPR_Item_ULTRABALL.SPR_Item_ULTRABALL" => PokeBall::UltraBall,
+            _ => return Err(()),
+        })
     }
 }
