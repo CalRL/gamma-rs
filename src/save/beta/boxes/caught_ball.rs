@@ -1,4 +1,4 @@
-use crate::save::beta::BetaEnumStr;
+use crate::save::beta::{BetaEnumStr, StorageType};
 use crate::save::beta::pokemon::ball::PokeBall;
 use gvas::GvasFile;
 use gvas::properties::Property;
@@ -8,9 +8,10 @@ pub struct CaughtBall<'a> {
     property: &'a Property,
 }
 impl<'a> CaughtBall<'a> {
-    pub fn new_party(gvas_file: &'a GvasFile) -> Option<Self> {
+    pub fn new(gvas_file: &'a GvasFile, storage_type: StorageType) -> Option<Self> {
+        let key = crate::utils::property_key(storage_type, "CaughtBall");
         Some(Self {
-            property: gvas_file.properties.get("PartyCaughtBall")?,
+            property: gvas_file.properties.get(key.as_str())?,
         })
     }
 
@@ -26,9 +27,10 @@ pub struct CaughtBallMut<'a> {
     property: &'a mut Property,
 }
 impl<'a> CaughtBallMut<'a> {
-    pub fn new_party(gvas_file: &'a mut GvasFile) -> Option<Self> {
-        Some(Self {
-            property: gvas_file.properties.get_mut("PartyCaughtBall")?,
+    pub fn new(gvas_file: &'a mut GvasFile, storage_type: StorageType) -> Option<Self> {
+        let key = crate::utils::property_key(storage_type, "CaughtBall");
+        Some(CaughtBallMut {
+            property: gvas_file.properties.get_mut(key.as_str())?,
         })
     }
 
