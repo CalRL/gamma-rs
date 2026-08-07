@@ -51,5 +51,5 @@ impl TryFrom<BetaEnumStr<'_>> for Types {
 #[derive(PartialEq, Clone, Debug)]
 pub enum StorageType {
     PARTY,
-    BOXES,
+    BOXES(i32),
 }
