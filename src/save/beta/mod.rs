@@ -13,7 +13,9 @@ pub mod pp_moves_lists;
 pub mod row_id;
 pub mod shiny_list;
 pub mod slot_id;
-
+pub mod trainer;
+pub mod player;
+pub mod poke_dollars;
 
 use crate::utils::get_enum_number;
 use pokemon::types::Types;
