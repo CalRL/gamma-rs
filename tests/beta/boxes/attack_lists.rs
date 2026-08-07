@@ -1,5 +1,5 @@
 use crate::common;
-use gamma_rs::save::beta::boxes::attack_lists::{
+use gamma_rs::save::beta::attack_lists::{
     attack_array, attack_at, attacks_at, parse_attack,
 };
 use gvas::GvasFile;

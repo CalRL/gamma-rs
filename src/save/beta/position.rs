@@ -1,5 +1,5 @@
-use crate::save::beta::boxes::row_id::RowID;
-use crate::save::beta::boxes::slot_id::SlotID;
+use crate::save::beta::row_id::RowID;
+use crate::save::beta::slot_id::SlotID;
 use gvas::GvasFile;
 use gvas::properties::array_property::ArrayProperty;
 

@@ -1,6 +1,6 @@
 use crate::common;
 
-use gamma_rs::save::beta::boxes::pp_moves_lists::{
+use gamma_rs::save::beta::pp_moves_lists::{
     current_pp_at, max_pp_at, moves_array, moves_at,
 };
 use gvas::GvasFile;

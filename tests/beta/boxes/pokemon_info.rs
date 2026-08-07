@@ -1,6 +1,6 @@
 use crate::common;
 
-use gamma_rs::save::beta::boxes::pokemon_info::{
+use gamma_rs::save::beta::pokemon_info::{
     PokemonInfo, PokemonInfoMut, get_is_fainted, get_level, get_name, get_nature, get_primary_type,
     get_secondary_type, get_stat, get_stat_mut, get_stats,
 };

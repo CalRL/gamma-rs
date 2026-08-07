@@ -1,6 +1,6 @@
 use crate::common;
 
-use gamma_rs::save::beta::boxes::pokemon_id::{id_array, id_array_mut, id_at, id_at_mut};
+use gamma_rs::save::beta::pokemon_id::{id_array, id_array_mut, id_at, id_at_mut};
 use gvas::GvasFile;
 
 struct IdCase<'a> {
