@@ -16,13 +16,13 @@ impl_storage_wrapper!(PokemonGender, "PokemonGender");
 impl_storage_wrapper_mut!(PokemonGenderMut, "PokemonGender");
 
 impl<'a> PokemonGender<'a> {
-    pub fn get_gender_at(&self, index: usize) -> Option<Gender> {
+    pub fn get_gender_at(&self, index: usize) -> Option<&String> {
         let value: &BytePropertyValue = get_gender_at(self.property.get_array()?, index)?;
-        let enum_string: String = get_property_string(value.clone())?;
 
-        let gender: Gender = Gender::from_enum(enum_string.as_str())?;
-
-        Some(gender)
+        match value {
+            BytePropertyValue::Namespaced(namespace) => Some(namespace),
+            _ => None,
+        }
     }
 }
 
