@@ -12,12 +12,10 @@ pub struct PokemonGenderMut<'a> {
     property: &'a mut Property,
 }
 
+impl_storage_wrapper!(PokemonGender, "PokemonGender");
+impl_storage_wrapper_mut!(PokemonGenderMut, "PokemonGender");
+
 impl<'a> PokemonGender<'a> {
-    pub fn new_party(gvas_file: &'a GvasFile) -> Option<Self> {
-        Some(Self {
-            property: gvas_file.properties.get("PartyGender")?,
-        })
-    }
     pub fn get_gender_at(&self, index: usize) -> Option<Gender> {
         let value: &BytePropertyValue = get_gender_at(self.property.get_array()?, index)?;
         let enum_string: String = get_property_string(value.clone())?;
@@ -29,12 +27,6 @@ impl<'a> PokemonGender<'a> {
 }
 
 impl<'a> PokemonGenderMut<'a> {
-    pub fn new_party(gvas_file: &'a mut GvasFile) -> Option<Self> {
-        Some(Self {
-            property: gvas_file.properties.get_mut("PartyGender")?,
-        })
-    }
-
     pub fn set_gender_at(&mut self, gender: Gender, index: usize) -> Result<(), String> {
         let array: &mut ArrayProperty = match self.property.get_array_mut() {
             None => return Err("Failed to get array".to_string()),
