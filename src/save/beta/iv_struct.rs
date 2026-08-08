@@ -21,11 +21,11 @@ pub fn get_ivs<'a>(property: &'a StructPropertyValue) -> Option<Vec<&'a i32>> {
     }
 }
 
-pub fn get_iv_at(properties: &StructProperty, index: usize, iv: IVs) -> Option<&i32> {
+pub fn get_iv_at<'a>() -> Option<&'a i32> {
     todo!()
 }
 
-pub fn get_iv_at_mut(properties: &mut StructProperty, index: usize, ivs: IVs) -> Option<&mut i32> {
+pub fn get_iv_at_mut<'a>() -> Option<&'a mut i32> {
     todo!()
 }
 
