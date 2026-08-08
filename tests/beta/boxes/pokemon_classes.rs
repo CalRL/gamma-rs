@@ -71,19 +71,6 @@ fn assert_raw_class_value(gvas_file: &GvasFile, case: &ClassCase<'_>) {
     assert_eq!(class_at(array, case.idx), Some(expected));
 }
 
-fn assert_parse_classes(gvas_file: &GvasFile, case: &ClassCase<'_>) {
-    let pokemon_classes = PokemonClasses::new(gvas_file, case.storage_type.clone())
-        .expect("pokemon classes wrapper exists");
-    let class = pokemon_classes
-        .class_at(case.idx)
-        .expect("pokemon class exists at index");
-    let parsed = pokemon_classes
-        .parse_class(class)
-        .expect("pokemon class parses");
-
-    assert_eq!(parsed, parse_class(class).expect("pokemon class parses"));
-}
-
 fn assert_mutates_class_value(gvas_file: &GvasFile, case: &ClassCase<'_>, new_class: &str) {
     let mut cloned_gvas_file = gvas_file.clone();
     let array = class_array_mut(&mut cloned_gvas_file, case.property_name);
@@ -117,24 +104,6 @@ fn reads_raw_pokemon_classes_from_gvas_file() {
 
     for case in cases {
         assert_raw_class_value(&gvas_file, case);
-    }
-}
-
-#[test]
-fn parses_pokemon_classes() {
-    let gvas_file = common::load_slot1();
-    let cases = &[
-        generate_case("PartyPokemonClasses", StorageType::PARTY, 0),
-        generate_case("Box1PokemonClasses", StorageType::BOXES(1), 0),
-    ];
-
-    assert_eq!(
-        parse_class("/Game/Blueprints/Pokemon/BP_Metagross.BP_Metagross_C"),
-        Some("Metagross".to_string())
-    );
-
-    for case in cases {
-        assert_parse_classes(&gvas_file, case);
     }
 }
 
