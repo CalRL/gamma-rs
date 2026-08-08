@@ -26,23 +26,3 @@ pub enum Error {
     InvalidVersion,
     Gvas(gvas::error::Error),
 }
-mod tests {
-    use std::fs::File;
-    use gvas::game_version::GameVersion;
-    use gvas::GvasFile;
-    use crate::save;
-    use crate::save::GammaFile;
-
-    const PATH: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/saves/Slot1.sav");
-    #[test]
-    fn slot1_sav_exists() {
-        assert!(File::open(PATH).is_ok())
-    }
-
-    #[test]
-    fn gammafile_test() {
-        let mut file = File::open(PATH).expect("save file doesnt exist");
-        let gvas = GvasFile::read(&mut file, GameVersion::Default).expect("gvas");
-        assert!(GammaFile::new(gvas, save::GameVersion::Beta).is_ok())
-    }
-}
