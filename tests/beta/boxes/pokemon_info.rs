@@ -342,6 +342,27 @@ fn assert_set_stat(gvas_file: &GvasFile, case: &SetStatCase) {
     assert!((value - case.new_value).abs() < f64::EPSILON);
 }
 
+fn assert_set_box_stat(gvas_file: &GvasFile, case: &SetStatCase) {
+    let mut cloned_gvas_file = gvas_file.clone();
+    let mut pokemon_info = PokemonInfoMut::new(&mut cloned_gvas_file, StorageType::BOXES(1))
+        .expect("box pokemon info exists");
+    assert!(
+        pokemon_info
+            .set_stat(case.idx, case.stat.clone(), case.new_value)
+            .is_ok()
+    );
+    drop(pokemon_info);
+
+    let property = cloned_gvas_file
+        .properties
+        .get("Box1PokemonInfo")
+        .expect("box pokemon info exists");
+    let pokemon_info = get_struct_property_at_idx(property, case.idx).expect("pokemon info exists");
+    let value = get_stat(pokemon_info, case.stat.clone()).expect("pokemon stat exists");
+
+    assert!((value - case.new_value).abs() < f64::EPSILON);
+}
+
 fn assert_set_name(gvas_file: &GvasFile, case: &SetNameCase<'_>) {
     let mut cloned_gvas_file = gvas_file.clone();
     let mut pokemon_info = PokemonInfoMut::new(&mut cloned_gvas_file, StorageType::PARTY)
@@ -463,6 +484,15 @@ fn sets_party_stat_on_cloned_gvas_file() {
     let cases = &[generate_set_stat_case(0, Stats::MaxHp, 123.0)];
     for case in cases {
         assert_set_stat(&gvas_file, case);
+    }
+}
+
+#[test]
+fn sets_box_stat_on_cloned_gvas_file() {
+    let gvas_file = common::load_slot1();
+    let cases = &[generate_set_stat_case(0, Stats::MaxHp, 123.0)];
+    for case in cases {
+        assert_set_box_stat(&gvas_file, case);
     }
 }
 
