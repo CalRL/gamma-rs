@@ -37,6 +37,13 @@ pub struct ShinyList<'a> {
     pub property: &'a Property,
 }
 
+pub struct ShinyListMut<'a> {
+    property: &'a mut Property,
+}
+
+impl_storage_wrapper!(ShinyList, "ShinyList");
+impl_storage_wrapper_mut!(ShinyListMut, "ShinyList");
+
 impl<'a> ShinyList<'a> {
     pub fn new_party(gvas_file: &'a GvasFile) -> Option<Self> {
         let prop = match gvas_file.properties.get("PartyShinyList") {
@@ -66,10 +73,6 @@ impl<'a> ShinyList<'a> {
     pub fn get_shiny_at(&self, index: usize) -> Option<&bool> {
         get_shiny_at(self.get_array()?, index)
     }
-}
-
-pub struct ShinyListMut<'a> {
-    property: &'a mut Property,
 }
 
 impl<'a> ShinyListMut<'a> {
