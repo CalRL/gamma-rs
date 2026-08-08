@@ -82,16 +82,4 @@ impl<'a> PokemonClasses<'a> {
 
         Some(strings)
     }
-
-    pub fn parse_class(&self, class: &str) -> Option<String> {
-        parse_class(class)
-    }
-    pub fn parse_classes(&self, classes: Vec<&String>) -> Option<Vec<String>> {
-        let mut class_vec = Vec::new();
-        for class in classes.iter() {
-            let parsed = self.parse_class(class)?;
-            class_vec.push(parsed)
-        }
-        Some(class_vec)
-    }
 }
