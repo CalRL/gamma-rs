@@ -40,31 +40,35 @@ pub fn get_is_fainted(property: &StructPropertyValue) -> Option<bool> {
 // SecondaryType - byte (enum)
 // nature - byte (enum)
 
-#[derive(Default, Clone, Debug)]
-pub struct InfoSnapshot {
-    pub is_fainted: Option<bool>,
-    pub name: Option<String>,
-    pub character_icon: Option<String>,
-    pub level: Option<i32>,
-    pub current_hp: Option<f64>,
-    pub max_hp: Option<f64>,
-    pub atk: Option<f64>,
-    pub def: Option<f64>,
-    pub satk: Option<f64>,
-    pub speed: Option<f64>,
+#[derive(Clone, Debug)]
+pub struct Snapshot<'a> {
+    pub is_fainted: &'a bool,
+    pub name: &'a String,
+    pub character_icon: &'a String,
+    pub level: &'a i32,
+    pub current_hp: &'a f64,
+    pub max_hp: &'a f64,
+    pub atk: &'a f64,
+    pub def: &'a f64,
+    pub satk: &'a f64,
+    pub speed: &'a f64,
     // These 3 are actually byte property values.
     // We won't store a ByteProperty, but rather the value as a string and convert later.
-    pub primary_type: Option<String>,
-    pub secondary_type: Option<String>,
-    pub nature: Option<String>,
+    pub primary_type: &'a String,
+    pub secondary_type: &'a String,
+    pub nature: &'a String,
 }
 // TODO: make a infosnapshot::new func with storagetype and index!
-
-pub fn get_stat(property: &StructPropertyValue, stat: Stats) -> Option<f64> {
+impl<'a> Snapshot<'a> {
+    pub fn new() {
+        panic!("not yet implemented")
+    }
+}
+pub fn get_stat(property: &StructPropertyValue, stat: Stats) -> Option<&f64> {
     let stat_str: &str = stat.as_str();
     let stat_property = get_first(property, stat_str)?;
     match &stat_property {
-        Property::DoubleProperty(double) => Some(double.value.0),
+        Property::DoubleProperty(double) => Some(&double.value.0),
         _ => None,
     }
 }
@@ -82,7 +86,7 @@ pub fn get_stat_mut(property: &mut StructPropertyValue, stat: Stats) -> Option<&
 pub fn get_stats(property: &StructPropertyValue) -> Option<StatStruct> {
     let mut map = std::collections::HashMap::new();
     for stat in Stats::iter() {
-        map.insert(stat.clone(), get_stat(property, stat)?);
+        map.insert(stat.clone(), *get_stat(property, stat)?);
     }
 
     Some(StatStruct { values: map })
@@ -215,7 +219,7 @@ impl<'a> PokemonInfo<'a> {
     }
     pub fn get_stat(&self, index: usize, stat: Stats) -> Option<f64> {
         let struct_at = get_struct_property_at_idx(self.property, index)?;
-        get_stat(struct_at, stat)
+        get_stat(struct_at, stat).copied()
     }
 }
 
