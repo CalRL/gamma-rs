@@ -28,7 +28,7 @@ pub fn class_at_mut(array: &mut ArrayProperty, idx: usize) -> Option<&mut String
 }
 
 /// Returns the name, from the class path.
-pub fn parse_class(class: &str) -> Option<String> {
+pub(crate) fn parse_class(class: &str) -> Option<String> {
     let string: String = String::from(class);
     let class: String = string.split(".").last()?.to_string();
     let name: String = class
@@ -44,18 +44,14 @@ pub struct PokemonClasses<'a> {
     property: &'a Property,
 }
 
+pub struct PokemonClassesMut<'a> {
+    property: &'a mut Property,
+}
+
+impl_storage_wrapper!(PokemonClasses, "PokemonClasses");
+impl_storage_wrapper_mut!(PokemonClassesMut, "PokemonClasses");
+
 impl<'a> PokemonClasses<'a> {
-    pub fn new_party(gvas_file: &'a GvasFile) -> Option<Self> {
-        let property = gvas_file.properties.get("PartyPokemonClasses")?;
-        Some(Self { property })
-    }
-
-    pub fn new_box(gvas_file: &'a GvasFile, index: usize) -> Option<Self> {
-        let key = format!("Box{}PokemonClasses", index);
-        let property = gvas_file.properties.get(key.as_str())?;
-        Some(Self { property })
-    }
-
     pub fn class_at(&self, idx: usize) -> Option<&String> {
         let arr = self.property.get_array()?;
         let class = class_at(arr, idx);
