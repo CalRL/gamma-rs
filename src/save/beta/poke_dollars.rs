@@ -1,11 +1,7 @@
 use gvas::GvasFile;
 
 pub fn get_poke_dollars(gvas_file: &GvasFile) -> Option<i32> {
-    let val = gvas_file
-        .properties
-        .get("pokeDollars")?
-        .get_int()?
-        .value;
+    let val = gvas_file.properties.get("pokeDollars")?.get_int()?.value;
 
     Some(val)
 }

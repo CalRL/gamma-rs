@@ -1,7 +1,5 @@
 use crate::common;
-use gamma_rs::save::beta::attack_lists::{
-    attack_array, attack_at, attacks_at, parse_attack,
-};
+use gamma_rs::save::beta::attack_lists::{attack_array, attack_at, attacks_at, parse_attack};
 use gvas::GvasFile;
 
 struct AttackCase<'a> {

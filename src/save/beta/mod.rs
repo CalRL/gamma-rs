@@ -1,11 +1,13 @@
 #[macro_use]
 mod macros;
-pub mod pokemon;
 pub mod attack_lists;
 pub mod caught_ball;
 pub mod gender;
 pub mod iv_struct;
 pub mod matrix;
+pub mod player;
+pub mod poke_dollars;
+pub mod pokemon;
 pub mod pokemon_classes;
 pub mod pokemon_gender;
 pub mod pokemon_id;
@@ -15,8 +17,6 @@ pub mod pp_moves_lists;
 pub mod row_id;
 pub mod shiny_list;
 pub mod slot_id;
-pub mod player;
-pub mod poke_dollars;
 
 use crate::utils::get_enum_number;
 use pokemon::types::Types;

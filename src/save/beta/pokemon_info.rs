@@ -20,7 +20,6 @@ pub struct PokemonInfoMut<'a> {
 impl_storage_wrapper!(PokemonInfo, "PokemonInfo");
 impl_storage_wrapper_mut!(PokemonInfoMut, "PokemonInfo");
 
-
 pub fn get_is_fainted(property: &StructPropertyValue) -> Option<bool> {
     Some(get_first(property, "isFainted")?.get_bool()?.value)
 }
