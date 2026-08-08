@@ -1,5 +1,4 @@
-mod common;
-
+use crate::common;
 use gamma_rs::save::beta::poke_dollars::{get_poke_dollars, get_poke_dollars_mut};
 use gvas::GvasFile;
 

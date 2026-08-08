@@ -1,5 +1,4 @@
-mod common;
-
+use crate::common;
 use gamma_rs::save::beta::player::name::{get_name, get_name_mut};
 use gvas::GvasFile;
 use gvas::properties::text_property::FTextHistory;

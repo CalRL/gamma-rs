@@ -1,5 +1,4 @@
-mod common;
-
+use crate::common;
 use gamma_rs::save::beta::player::direction::{get_direction, get_direction_mut};
 
 fn assert_float_eq(actual: f64, expected: f64) {
