@@ -28,7 +28,7 @@ pub fn class_at_mut(array: &mut ArrayProperty, idx: usize) -> Option<&mut String
 }
 
 /// Returns the name, from the class path.
-pub(crate) fn parse_class(class: &str) -> Option<String> {
+pub fn parse_class(class: &str) -> Option<String> {
     let string: String = String::from(class);
     let class: String = string.split(".").last()?.to_string();
     let name: String = class
