@@ -1,5 +1,6 @@
 pub mod attack_lists;
 pub mod caught_ball;
+pub mod iv_struct;
 pub mod pokemon_classes;
 pub mod pokemon_gender;
 pub mod pokemon_id;
