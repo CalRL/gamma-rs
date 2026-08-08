@@ -32,18 +32,22 @@ pub fn get_iv_at_mut(properties: &mut StructProperty, index: usize, ivs: IVs) ->
 #[derive(Clone, Debug)]
 pub struct IV<'a> {
     property: &'a Property,
-    box_number: Option<usize>,
-    storage_type: StorageType,
+}
+pub struct IVMut<'a> {
+    property: &'a mut Property,
 }
 
 impl<'a> IV<'a> {
-    pub fn new_party(gvas_file: &'a GvasFile) -> Option<Self> {
-        let prop = gvas_file.properties.get("PartyIVstruct")?;
+    pub fn new(gvas_file: &'a GvasFile, storage_type: StorageType) -> Option<Self> {
+        let key = match storage_type {
+            StorageType::PARTY => crate::utils::property_key(storage_type, "IVstruct"),
+            StorageType::BOXES(num) => crate::utils::property_key(storage_type, "IV")
+        };
+
+        let prop = gvas_file.properties.get(key.as_str())?;
 
         Some(IV {
-            property: &prop,
-            box_number: None,
-            storage_type: StorageType::PARTY,
+            property: prop
         })
     }
 
@@ -77,20 +81,17 @@ impl<'a> IV<'a> {
     }
 }
 
-pub struct IVMut<'a> {
-    property: &'a mut Property,
-    box_number: Option<usize>,
-    storage_type: StorageType,
-}
-
 impl<'a> IVMut<'a> {
-    pub fn new_party(gvas_file: &'a mut GvasFile) -> Option<Self> {
-        let prop = gvas_file.properties.get_mut("PartyIVstruct")?;
+    pub fn new(gvas_file: &'a mut GvasFile, storage_type: StorageType) -> Option<Self> {
+        let key = match storage_type {
+            StorageType::PARTY => crate::utils::property_key(storage_type, "IVstruct"),
+            StorageType::BOXES(num) => crate::utils::property_key(storage_type, "IV")
+        };
+
+        let prop = gvas_file.properties.get_mut(key.as_str())?;
 
         Some(IVMut {
-            property: prop,
-            box_number: None,
-            storage_type: StorageType::PARTY,
+            property: prop
         })
     }
 
