@@ -1,6 +1,7 @@
 use crate::save::beta::row_id::RowID;
 use crate::save::beta::slot_id::SlotID;
 use gvas::GvasFile;
+use crate::save::beta::StorageType;
 
 pub struct Matrix(Vec<Vec<i32>>);
 
@@ -12,8 +13,8 @@ pub enum Error {
 }
 impl Matrix {
     pub fn new(gvas_file: GvasFile, box_number: i32) -> Result<Matrix, Error> {
-        let rows = RowID::new(&gvas_file, box_number).ok_or(Error::InvalidRows)?;
-        let cols = SlotID::new(&gvas_file, box_number).ok_or(Error::InvalidSlots)?;
+        let rows = RowID::new(&gvas_file, StorageType::BOXES(box_number)).ok_or(Error::InvalidRows)?;
+        let cols = SlotID::new(&gvas_file, StorageType::BOXES(box_number)).ok_or(Error::InvalidSlots)?;
 
         Err(Error::InvalidSlots)
     }

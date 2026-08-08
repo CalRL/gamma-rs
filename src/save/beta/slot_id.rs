@@ -9,19 +9,9 @@ pub struct SlotID<'a> {
 pub struct SlotIDMut<'a> {
     property: &'a mut Property,
 }
-
+impl_storage_wrapper!(SlotID, "SlotID");
+impl_storage_wrapper_mut!(SlotIDMut, "SlotID");
 impl<'a> SlotID<'a> {
-    pub fn new(gvas_file: &'a GvasFile, box_number: i32) -> Option<Self> {
-        let key = format!("Box{}SlotID", box_number);
-        let property = match gvas_file.properties.get(key.as_str()) {
-            None => {
-                return None;
-            }
-            Some(p) => p,
-        };
-
-        Some(Self { property })
-    }
 
     pub fn at_index(self, index: usize) -> Option<&'a i32> {
         let list = get_slot_list(self.property)?;

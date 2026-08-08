@@ -10,19 +10,10 @@ pub struct RowIDMut<'a> {
     property: &'a mut Property,
 }
 
+impl_storage_wrapper!(RowID, "RowID");
+impl_storage_wrapper_mut!(RowIDMut, "RowID");
+
 impl<'a> RowID<'a> {
-    pub fn new(gvas_file: &'a GvasFile, box_number: i32) -> Option<Self> {
-        let key = format!("Box{}RowID", box_number);
-        let property = match gvas_file.properties.get(key.as_str()) {
-            None => {
-                return None;
-            }
-            Some(p) => p,
-        };
-
-        Some(Self { property })
-    }
-
     pub fn at_index(self, index: usize) -> Option<&'a i32> {
         let list = get_row_list(self.property)?;
         get_row_at(list, index)
