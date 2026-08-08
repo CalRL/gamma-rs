@@ -12,8 +12,8 @@ pub struct PokemonGenderMut<'a> {
     property: &'a mut Property,
 }
 
-impl_storage_wrapper!(PokemonGender, "PokemonGender");
-impl_storage_wrapper_mut!(PokemonGenderMut, "PokemonGender");
+impl_storage_wrapper!(PokemonGender, "Gender");
+impl_storage_wrapper_mut!(PokemonGenderMut, "Gender");
 
 impl<'a> PokemonGender<'a> {
     pub fn get_gender_at(&self, index: usize) -> Option<&String> {
