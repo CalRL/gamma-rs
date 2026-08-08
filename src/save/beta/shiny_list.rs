@@ -45,23 +45,6 @@ impl_storage_wrapper!(ShinyList, "ShinyList");
 impl_storage_wrapper_mut!(ShinyListMut, "ShinyList");
 
 impl<'a> ShinyList<'a> {
-    pub fn new_party(gvas_file: &'a GvasFile) -> Option<Self> {
-        let prop = match gvas_file.properties.get("PartyShinyList") {
-            None => None,
-            Some(p) => Some(Self { property: p }),
-        };
-
-        prop
-    }
-
-    pub fn new_box(gvas_file: &'a GvasFile, box_id: usize) -> Option<Self> {
-        let key = format!("Box{}ShinyList", box_id);
-        match gvas_file.properties.get(key.as_str()) {
-            None => None,
-            Some(p) => Some(Self { property: p }),
-        }
-    }
-
     fn get_array(&self) -> Option<&ArrayProperty> {
         self.property.get_array()
     }
@@ -76,16 +59,6 @@ impl<'a> ShinyList<'a> {
 }
 
 impl<'a> ShinyListMut<'a> {
-    pub fn new_party(gvas_file: &'a mut GvasFile) -> Option<Self> {
-        let property: &mut Property = match gvas_file.properties.get_mut("PartyShinyList") {
-            None => {
-                return None;
-            }
-            Some(p) => p,
-        };
-        Some(Self { property })
-    }
-
     pub fn set_shiny_at(&mut self, index: usize, value: bool) -> Result<(), String> {
         match self.property {
             Property::ArrayProperty(array) => {
