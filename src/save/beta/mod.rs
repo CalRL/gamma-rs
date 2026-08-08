@@ -1,3 +1,5 @@
+#[macro_use]
+mod macros;
 pub mod pokemon;
 pub mod attack_lists;
 pub mod caught_ball;
@@ -13,7 +15,6 @@ pub mod pp_moves_lists;
 pub mod row_id;
 pub mod shiny_list;
 pub mod slot_id;
-pub mod trainer;
 pub mod player;
 pub mod poke_dollars;
 
