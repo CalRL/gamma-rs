@@ -1,7 +1,7 @@
 use crate::common;
 
 use gamma_rs::save::beta::StorageType;
-use gamma_rs::save::beta::pokemon_classes::{PokemonClasses, class_at, class_at_mut, parse_class};
+use gamma_rs::save::beta::pokemon_classes::{PokemonClasses, class_at, class_at_mut};
 use gvas::GvasFile;
 use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
