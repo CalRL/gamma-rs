@@ -47,11 +47,6 @@
 
 ## Files That Need Tests
 
-- `src/save/beta/shiny_list.rs`
-  - Read party shiny values.
-  - Read box shiny values.
-  - Mutate shiny values on a cloned save.
-
 - `src/save/beta/pokemon_classes.rs`
   - Read party and box class paths.
   - Test `parse_class` against real class paths.
