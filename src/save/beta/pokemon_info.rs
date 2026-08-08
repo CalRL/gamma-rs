@@ -8,6 +8,19 @@ use gvas::properties::int_property::BytePropertyValue;
 use gvas::properties::struct_property::StructPropertyValue;
 use gvas::properties::text_property::FTextHistory;
 
+pub struct PokemonInfo<'a> {
+    /// The actual property containing isFainted, IVs, name, etc.
+    property: &'a Property,
+}
+
+pub struct PokemonInfoMut<'a> {
+    property: &'a mut Property,
+}
+
+impl_storage_wrapper!(PokemonInfo, "PokemonInfo");
+impl_storage_wrapper_mut!(PokemonInfoMut, "PokemonInfo");
+
+
 pub fn get_is_fainted(property: &StructPropertyValue) -> Option<bool> {
     Some(get_first(property, "isFainted")?.get_bool()?.value)
 }
@@ -143,12 +156,6 @@ pub fn get_secondary_type(property: &StructPropertyValue) -> Option<&String> {
 pub fn get_nature(property: &StructPropertyValue) -> Option<&String> {
     get_namespaced(property, "Nature")
 }
-
-pub struct PokemonInfo<'a> {
-    /// The actual property containing isFainted, IVs, name, etc.
-    property: &'a Property,
-}
-
 fn get_first<'a>(property: &'a StructPropertyValue, key_prefix: &str) -> Option<&'a Property> {
     property
         .get_custom_struct()?
@@ -173,12 +180,6 @@ fn get_first_mut<'a>(
 }
 
 impl<'a> PokemonInfo<'a> {
-    /// Todo: turn this into a trait
-    pub fn new_party(gvas_file: &'a GvasFile) -> Option<Self> {
-        let prop = gvas_file.properties.get("PartyPokemonInfo")?;
-        Some(Self { property: prop })
-    }
-
     pub fn get_is_fainted(&self, index: usize) -> Option<bool> {
         let struct_at = get_struct_property_at_idx(self.property, index)?;
         get_is_fainted(struct_at)
@@ -219,20 +220,7 @@ impl<'a> PokemonInfo<'a> {
     }
 }
 
-pub struct PokemonInfoMut<'a> {
-    property: &'a mut Property,
-    storage_type: StorageType,
-}
-
 impl<'a> PokemonInfoMut<'a> {
-    pub fn new_party(gvas_file: &'a mut GvasFile) -> Option<Self> {
-        let prop = gvas_file.properties.get_mut("PartyPokemonInfo")?;
-        Some(Self {
-            property: prop,
-            storage_type: StorageType::PARTY,
-        })
-    }
-
     pub fn set_stat(
         &mut self,
         index: usize,

@@ -9,6 +9,7 @@ use gamma_rs::utils::custom_struct::get_struct_property_at_idx;
 use gvas::GvasFile;
 use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::struct_property::StructPropertyValue;
+use gamma_rs::save::beta::StorageType;
 
 struct NameCase<'a> {
     array_name: &'a str,
@@ -276,7 +277,7 @@ fn assert_level(gvas_file: &GvasFile, case: &LevelCase<'_>) {
 }
 
 fn assert_party_level(gvas_file: &GvasFile, case: &PartyLevelCase) {
-    let pokemon_info = PokemonInfo::new_party(gvas_file).expect("party pokemon info exists");
+    let pokemon_info = PokemonInfo::new(gvas_file, StorageType::PARTY).expect("party pokemon info exists");
     let level = pokemon_info
         .get_level(case.idx)
         .expect("pokemon level exists");
@@ -322,7 +323,7 @@ fn assert_stats(gvas_file: &GvasFile, case: &StatsCase<'_>) {
 fn assert_set_stat(gvas_file: &GvasFile, case: &SetStatCase) {
     let mut cloned_gvas_file = gvas_file.clone();
     let mut pokemon_info =
-        PokemonInfoMut::new_party(&mut cloned_gvas_file).expect("party pokemon info exists");
+        PokemonInfoMut::new(&mut cloned_gvas_file, StorageType::PARTY).expect("party pokemon info exists");
     assert!(
         pokemon_info
             .set_stat(case.idx, case.stat.clone(), case.new_value)
@@ -343,7 +344,7 @@ fn assert_set_stat(gvas_file: &GvasFile, case: &SetStatCase) {
 fn assert_set_name(gvas_file: &GvasFile, case: &SetNameCase<'_>) {
     let mut cloned_gvas_file = gvas_file.clone();
     let mut pokemon_info =
-        PokemonInfoMut::new_party(&mut cloned_gvas_file).expect("party pokemon info exists");
+        PokemonInfoMut::new(&mut cloned_gvas_file, StorageType::PARTY).expect("party pokemon info exists");
     assert!(
         pokemon_info
             .set_name(case.idx, case.new_name.to_string())
