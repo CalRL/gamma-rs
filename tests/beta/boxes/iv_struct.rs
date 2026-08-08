@@ -72,9 +72,7 @@ fn assert_wrapper_ivs(gvas_file: &GvasFile, case: &IvCase<'_>) {
 
 fn assert_single_iv(gvas_file: &GvasFile, case: &IvCase<'_>, iv: IVs, expected_value: i32) {
     let ivs = IV::new(gvas_file, case.storage_type.clone()).expect("iv wrapper exists");
-    let actual = ivs
-        .get_iv_at(case.idx, iv)
-        .expect("single iv value exists");
+    let actual = ivs.get_iv_at(case.idx, iv).expect("single iv value exists");
 
     assert_eq!(*actual, expected_value);
 }
@@ -156,7 +154,12 @@ fn assert_struct_property_at_idx_mut(gvas_file: &GvasFile, case: &IvMutCase) {
 fn reads_raw_ivs_from_gvas_file() {
     let gvas_file = common::load_slot1();
     let cases = [
-        generate_case("PartyIVstruct", StorageType::PARTY, 2, [24, 15, 23, 31, 16, 24]),
+        generate_case(
+            "PartyIVstruct",
+            StorageType::PARTY,
+            2,
+            [24, 15, 23, 31, 16, 24],
+        ),
         generate_case("Box1IV", StorageType::BOXES(1), 0, [31, 31, 31, 31, 31, 31]),
     ];
 
@@ -169,7 +172,12 @@ fn reads_raw_ivs_from_gvas_file() {
 fn gets_struct_property_at_idx() {
     let gvas_file = common::load_slot1();
     let cases = [
-        generate_case("PartyIVstruct", StorageType::PARTY, 2, [24, 15, 23, 31, 16, 24]),
+        generate_case(
+            "PartyIVstruct",
+            StorageType::PARTY,
+            2,
+            [24, 15, 23, 31, 16, 24],
+        ),
         generate_case("Box1IV", StorageType::BOXES(1), 0, [31, 31, 31, 31, 31, 31]),
     ];
 
@@ -195,7 +203,12 @@ fn gets_struct_property_at_idx_mut() {
 fn reads_ivs_from_wrapper() {
     let gvas_file = common::load_slot1();
     let cases = [
-        generate_case("PartyIVstruct", StorageType::PARTY, 2, [24, 15, 23, 31, 16, 24]),
+        generate_case(
+            "PartyIVstruct",
+            StorageType::PARTY,
+            2,
+            [24, 15, 23, 31, 16, 24],
+        ),
         generate_case("Box1IV", StorageType::BOXES(1), 0, [31, 31, 31, 31, 31, 31]),
     ];
 
@@ -213,12 +226,7 @@ fn reads_single_ivs_from_wrapper() {
         2,
         [24, 15, 23, 31, 16, 24],
     );
-    let box_case = generate_case(
-        "Box1IV",
-        StorageType::BOXES(1),
-        0,
-        [31, 31, 31, 31, 31, 31],
-    );
+    let box_case = generate_case("Box1IV", StorageType::BOXES(1), 0, [31, 31, 31, 31, 31, 31]);
 
     assert_single_iv(&gvas_file, &party_case, IVs::SPEED, 24);
     assert_single_iv(&gvas_file, &box_case, IVs::HP, 31);

@@ -36,7 +36,8 @@ fn reads_box_slot_ids_from_gvas_file() {
     let cases = [(0, 1), (1, 1), (2, 2)];
 
     for (idx, expected_slot) in cases {
-        let slot_id = SlotID::new(&gvas_file, StorageType::BOXES(1)).expect("slot id wrapper exists");
+        let slot_id =
+            SlotID::new(&gvas_file, StorageType::BOXES(1)).expect("slot id wrapper exists");
         let actual = slot_id.at_index(idx).expect("slot id exists at index");
 
         assert_eq!(*actual, expected_slot);

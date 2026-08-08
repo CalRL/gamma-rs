@@ -12,7 +12,6 @@ pub struct SlotIDMut<'a> {
 impl_storage_wrapper!(SlotID, "SlotID");
 impl_storage_wrapper_mut!(SlotIDMut, "SlotID");
 impl<'a> SlotID<'a> {
-
     pub fn at_index(self, index: usize) -> Option<&'a i32> {
         let list = get_slot_list(self.property)?;
         get_slot_at(list, index)

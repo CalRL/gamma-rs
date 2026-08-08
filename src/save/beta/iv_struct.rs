@@ -41,14 +41,12 @@ impl<'a> IV<'a> {
     pub fn new(gvas_file: &'a GvasFile, storage_type: StorageType) -> Option<Self> {
         let key = match storage_type {
             StorageType::PARTY => crate::utils::property_key(storage_type, "IVstruct"),
-            StorageType::BOXES(num) => crate::utils::property_key(storage_type, "IV")
+            StorageType::BOXES(num) => crate::utils::property_key(storage_type, "IV"),
         };
 
         let prop = gvas_file.properties.get(key.as_str())?;
 
-        Some(IV {
-            property: prop
-        })
+        Some(IV { property: prop })
     }
 
     pub fn new_box(gvas_file: &'a GvasFile, box_number: Option<usize>) -> Self {
@@ -85,14 +83,12 @@ impl<'a> IVMut<'a> {
     pub fn new(gvas_file: &'a mut GvasFile, storage_type: StorageType) -> Option<Self> {
         let key = match storage_type {
             StorageType::PARTY => crate::utils::property_key(storage_type, "IVstruct"),
-            StorageType::BOXES(num) => crate::utils::property_key(storage_type, "IV")
+            StorageType::BOXES(num) => crate::utils::property_key(storage_type, "IV"),
         };
 
         let prop = gvas_file.properties.get_mut(key.as_str())?;
 
-        Some(IVMut {
-            property: prop
-        })
+        Some(IVMut { property: prop })
     }
 
     pub fn set_iv_at(&mut self, index: usize, iv: IVs, value: i32) -> Result<(), String> {

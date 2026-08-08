@@ -1,8 +1,8 @@
+use crate::save::beta::StorageType;
 use crate::save::beta::row_id::RowID;
 use crate::save::beta::slot_id::SlotID;
 use gvas::GvasFile;
 use gvas::properties::array_property::ArrayProperty;
-use crate::save::beta::StorageType;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BoxPosition {
@@ -30,7 +30,8 @@ impl BoxPosition {
     pub fn exists_at(&self, gvas_file: &GvasFile, box_number: i32) -> Result<bool, Error> {
         let row_arr = RowID::new(gvas_file, StorageType::BOXES(box_number)).ok_or(Error::NoRows)?;
 
-        let slot_arr = SlotID::new(gvas_file, StorageType::BOXES(box_number)).ok_or(Error::NoSlots)?;
+        let slot_arr =
+            SlotID::new(gvas_file, StorageType::BOXES(box_number)).ok_or(Error::NoSlots)?;
 
         let row_prop = row_arr.as_list().ok_or(Error::InvalidRowArray)?;
 

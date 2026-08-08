@@ -7,5 +7,5 @@ pub mod pokemon_gender;
 pub mod pokemon_id;
 pub mod pokemon_info;
 pub mod pp_moves_lists;
-pub mod shiny_list;
 pub mod row_slot_id;
+pub mod shiny_list;
