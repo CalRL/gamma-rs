@@ -1,5 +1,4 @@
 use crate::save::beta::pokemon::gender::Gender;
-use gvas::GvasFile;
 use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::int_property::BytePropertyValue;
@@ -57,10 +56,7 @@ fn get_gender_at(array: &ArrayProperty, index: usize) -> Option<&BytePropertyVal
         _ => return None,
     };
 
-    let bytes: &Property = match props.get(index) {
-        None => return None,
-        Some(byte) => byte,
-    };
+    let bytes: &Property = props.get(index)?;
 
     match bytes {
         Property::ByteProperty(prop) => Some(&prop.value),

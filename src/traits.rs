@@ -101,28 +101,26 @@ pub trait PropertyPath {
 impl PropertyPath for Property {
     /// Returns a CUSTOMSTRUCT
     fn get_starts_with(&self, prefix: &str) -> Option<&Property> {
-        if let Property::StructProperty(StructProperty { value, .. }) = self {
-            if let StructPropertyValue::CustomStruct { 0: map, .. } = value {
+        if let Property::StructProperty(StructProperty { value, .. }) = self
+            && let StructPropertyValue::CustomStruct { 0: map, .. } = value {
                 for (k, v) in map.iter() {
                     if k.starts_with(prefix) {
                         return v.first();
                     }
                 }
             }
-        }
         None
     }
 
     fn get_starts_with_mut(&mut self, prefix: &str) -> Option<&mut Property> {
-        if let Property::StructProperty(StructProperty { value, .. }) = self {
-            if let StructPropertyValue::CustomStruct { 0: map, .. } = value {
+        if let Property::StructProperty(StructProperty { value, .. }) = self
+            && let StructPropertyValue::CustomStruct { 0: map, .. } = value {
                 for (k, v) in map.iter_mut() {
                     if k.starts_with(prefix) {
                         return v.first_mut();
                     }
                 }
             }
-        }
         None
     }
 }
@@ -175,7 +173,7 @@ impl NamespacedValue for StructProperty {
         }
     }
 
-    fn get_namespaced_value_mut(&mut self, string: &str) -> Option<&mut String> {
+    fn get_namespaced_value_mut(&mut self, _string: &str) -> Option<&mut String> {
         todo!()
     }
 }

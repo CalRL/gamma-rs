@@ -4,7 +4,7 @@ use crate::utils::custom_struct::{get_struct_property_at_idx, get_struct_propert
 use gvas::GvasFile;
 use gvas::properties::Property;
 use gvas::properties::int_property::IntProperty;
-use gvas::properties::struct_property::{StructProperty, StructPropertyValue};
+use gvas::properties::struct_property::StructPropertyValue;
 
 pub fn get_ivs<'a>(property: &'a StructPropertyValue) -> Option<Vec<&'a i32>> {
     match property {
@@ -41,7 +41,7 @@ impl<'a> IV<'a> {
     pub fn new(gvas_file: &'a GvasFile, storage_type: StorageType) -> Option<Self> {
         let key = match storage_type {
             StorageType::PARTY => crate::utils::property_key(storage_type, "IVstruct"),
-            StorageType::BOXES(num) => crate::utils::property_key(storage_type, "IV"),
+            StorageType::BOXES(_num) => crate::utils::property_key(storage_type, "IV"),
         };
 
         let prop = gvas_file.properties.get(key.as_str())?;
@@ -49,7 +49,7 @@ impl<'a> IV<'a> {
         Some(IV { property: prop })
     }
 
-    pub fn new_box(gvas_file: &'a GvasFile, box_number: Option<usize>) -> Self {
+    pub fn new_box(_gvas_file: &'a GvasFile, _box_number: Option<usize>) -> Self {
         todo!()
     }
 
@@ -83,7 +83,7 @@ impl<'a> IVMut<'a> {
     pub fn new(gvas_file: &'a mut GvasFile, storage_type: StorageType) -> Option<Self> {
         let key = match storage_type {
             StorageType::PARTY => crate::utils::property_key(storage_type, "IVstruct"),
-            StorageType::BOXES(num) => crate::utils::property_key(storage_type, "IV"),
+            StorageType::BOXES(_num) => crate::utils::property_key(storage_type, "IV"),
         };
 
         let prop = gvas_file.properties.get_mut(key.as_str())?;

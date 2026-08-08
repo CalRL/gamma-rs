@@ -13,9 +13,9 @@ pub enum Error {
 }
 impl Matrix {
     pub fn new(gvas_file: GvasFile, box_number: i32) -> Result<Matrix, Error> {
-        let rows =
+        let _rows =
             RowID::new(&gvas_file, StorageType::BOXES(box_number)).ok_or(Error::InvalidRows)?;
-        let cols =
+        let _cols =
             SlotID::new(&gvas_file, StorageType::BOXES(box_number)).ok_or(Error::InvalidSlots)?;
 
         Err(Error::InvalidSlots)

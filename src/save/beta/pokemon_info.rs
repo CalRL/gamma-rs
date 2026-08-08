@@ -1,7 +1,5 @@
-use crate::save::beta::StorageType;
 use crate::save::beta::pokemon::stats::{StatStruct, Stats};
 use crate::utils::custom_struct::get_struct_property_at_idx;
-use gvas::GvasFile;
 use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
 use gvas::properties::int_property::BytePropertyValue;

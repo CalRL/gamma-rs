@@ -35,11 +35,10 @@ impl<'a> CaughtBallMut<'a> {
     }
 
     pub fn set_ball_at(&mut self, poke_ball: PokeBall, index: usize) -> Result<(), String> {
-        if let Some(arr) = self.property.get_array_mut() {
-            if let Some(ball_enum) = get_caught_ball_at_mut(arr, index) {
+        if let Some(arr) = self.property.get_array_mut()
+            && let Some(ball_enum) = get_caught_ball_at_mut(arr, index) {
                 *ball_enum = poke_ball.as_enum().to_string()
             }
-        }
 
         Ok(())
     }

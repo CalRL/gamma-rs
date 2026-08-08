@@ -20,7 +20,6 @@ pub mod slot_id;
 
 use crate::utils::get_enum_number;
 use pokemon::types::Types;
-use std::str::FromStr;
 
 pub struct BetaEnumStr<'a>(&'a str);
 

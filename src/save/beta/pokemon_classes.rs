@@ -1,4 +1,3 @@
-use gvas::GvasFile;
 use gvas::properties::Property;
 use gvas::properties::array_property::ArrayProperty;
 
@@ -54,30 +53,21 @@ impl_storage_wrapper_mut!(PokemonClassesMut, "PokemonClasses");
 impl<'a> PokemonClasses<'a> {
     pub fn class_at(&self, idx: usize) -> Option<&String> {
         let arr = self.property.get_array()?;
-        let class = class_at(arr, idx);
+        
 
-        class
+        class_at(arr, idx)
     }
 
     pub fn classes(&self) -> Option<Vec<&String>> {
-        let array: &ArrayProperty = match self.property.get_array() {
-            None => return None,
-            Some(arr) => arr,
-        };
+        let array: &ArrayProperty = self.property.get_array()?;
         let mut strings: Vec<&String> = Vec::new();
-        match array {
-            ArrayProperty::Properties { properties, .. } => {
-                for i in properties.iter() {
-                    match i {
-                        Property::ObjectProperty(prop) => {
-                            let val = &prop.value;
-                            strings.push(val);
-                        }
-                        _ => {}
-                    }
+        if let ArrayProperty::Properties { properties, .. } = array {
+            for i in properties.iter() {
+                if let Property::ObjectProperty(prop) = i {
+                    let val = &prop.value;
+                    strings.push(val);
                 }
             }
-            _ => {}
         };
 
         Some(strings)

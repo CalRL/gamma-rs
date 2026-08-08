@@ -23,7 +23,7 @@ pub fn attacks_at(array: &ArrayProperty, index: usize) -> Option<&ArrayProperty>
         if key.starts_with("Attacks_") {
             let first = val.first()?;
             return match &first {
-                Property::ArrayProperty(arr) => Some(&arr),
+                Property::ArrayProperty(arr) => Some(arr),
                 _ => None,
             };
         }

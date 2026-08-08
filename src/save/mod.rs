@@ -10,14 +10,11 @@ pub struct GammaFile(GvasFile, GameVersion);
 
 impl GammaFile {
     pub fn test(&self) {
-        ()
+        
     }
 
     pub fn new(gvas_file: GvasFile, version: GameVersion) -> Result<GammaFile, Error> {
-        Ok(GammaFile {
-            0: gvas_file,
-            1: version,
-        })
+        Ok(GammaFile(gvas_file, version))
     }
     pub fn save(self, file: &mut File) -> Result<(), gvas::error::Error> {
         self.0.write(file)
@@ -30,11 +27,12 @@ pub enum Error {
     Gvas(gvas::error::Error),
 }
 mod tests {
+    use std::fs::File;
+    use gvas::game_version::GameVersion;
+    use gvas::GvasFile;
     use crate::save;
     use crate::save::GammaFile;
-    use gvas::GvasFile;
-    use gvas::game_version::GameVersion;
-    use std::fs::File;
+
     const PATH: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/saves/Slot1.sav");
     #[test]
     fn slot1_sav_exists() {
